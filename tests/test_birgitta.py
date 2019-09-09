@@ -4,7 +4,7 @@ from birgitta import birgitta
 
 
 def test_dummy(capsys):
-    """Correct my_name argument prints"""
+    """Correct name argument print"""
     birgitta.dummy("Av")
     captured = capsys.readouterr()
     assert f"Printing a dummy line Av" in captured.out
