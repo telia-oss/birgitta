@@ -33,7 +33,6 @@ setup(
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Topic :: Machine Learning, Data Engineering',
     ],
 
     keywords='',
