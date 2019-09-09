@@ -3,7 +3,7 @@ TAG = latest
 
 SRC_DIR = $(shell pwd)
 DIST_DIR = $(SRC_DIR)/dist
-BIRGITTA_TESTS = $(SRC_DIR)/ngadss
+BIRGITTA_TESTS = $(SRC_DIR)/tests
 
 package: clean
 	python setup.py sdist bdist_wheel
