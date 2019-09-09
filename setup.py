@@ -51,30 +51,16 @@ setup(
 
     # List of dependencies, with exact versions
     install_requires=[
-            'numpy==1.15.2',
-            'pyspark==2.3.1',
-            'mock==2.0.0',
-            'pandas==0.24.1',
-            'pyarrow==0.13.0',
-            'pytest==3.8.0',
-            'pytest-cov==2.5.1',
-            'pytest_mock==1.10.0',
-            'holidays==0.9.10'
+            'numpy',
+            'pyspark',
+            'mock',
+            'pandas',
+            'pyarrow',
+            'pytest',
+            'pytest-cov',
+            'pytest_mock',
+            'holidays'
     ],
-
-    # List additional groups of dependencies here (e.g. development
-    # dependencies). You can install these using the following syntax,
-    # for example:
-    # $ pip install -e .[dev,test]
-    extras_require={
-        'dev': [
-            'flake8==3.7.7',
-            'flake8-import-order==0.18',
-            'jupyter==1.0.0',
-            'pip==19.0.3',
-            'wheel==0.33.1'
-        ]
-    },
 
     include_package_data=True,
     package_data={},
