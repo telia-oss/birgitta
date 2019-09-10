@@ -3,7 +3,10 @@ TAG = latest
 
 SRC_DIR = $(shell pwd)
 DIST_DIR = $(SRC_DIR)/dist
-BIRGITTA_TESTS = $(SRC_DIR)/ngadss
+BIRGITTA_TESTS = $(SRC_DIR)/tests
+
+package: clean
+	python setup.py sdist bdist_wheel
 
 clean:
 	cd $(SRC_DIR)
@@ -20,7 +23,8 @@ clean:
 	rm -rf tmp/*
 
 configure:
-	pip install -e ".[dev]"
+	pip install -r requirements.txt
+	pip install -r requirements_dev.txt
 
 lint:
 	flake8
