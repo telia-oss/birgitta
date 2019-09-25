@@ -43,24 +43,28 @@ setup(
         '*.tests',
         '*.tests.*',
         'tests.*',
-        'tests',
-        'birgitta/tests.*',
-        'birgitta/tests'
+        'tests'
         ]),
 
     # List of dependencies, with exact versions
     install_requires=[
-            'numpy',
-            'pyspark',
-            'mock',
-            'pandas',
-            'pyarrow',
-            'pytest',
-            'pytest-cov',
-            'pytest_mock',
-            'holidays'
+        'docopt',
+        'numpy',
+        'pyspark',
+        'mock',
+        'pandas',
+        'pyarrow',
+        'pytest',
+        'pytest-cov',
+        'pytest_mock',
+        'holidays'
     ],
 
     include_package_data=True,
     package_data={},
+    entry_points={
+        'console_scripts': [
+            'birgitta=birgitta.cli.__main__:main'
+        ]
+    }
 )
