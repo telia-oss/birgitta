@@ -1,12 +1,17 @@
-COV_MIN = 100 # Gradually increase this as we add more tests
+COV_MIN = 85 # Gradually increase this as we add more tests
 TAG = latest
 
 SRC_DIR = $(shell pwd)
 DIST_DIR = $(SRC_DIR)/dist
 BIRGITTA_TESTS = $(SRC_DIR)/tests
+PROJECT_TESTS = $(SRC_DIR)/examples/organizations/newsltd
 
-package: clean
+package: clean json_fixtures
 	python setup.py sdist bdist_wheel
+
+clean_json_fixtures:
+	rm -rf "$(SRC_DIR)/examples/organizations/newsltd/projects/chronicle/tests/fixtures/generated_json/*"
+	rm -rf "$(SRC_DIR)/examples/organizations/newsltd/projects/tribune/tests/fixtures/generated_json/*"
 
 clean:
 	cd $(SRC_DIR)
@@ -19,8 +24,13 @@ clean:
 	rm -rf htmlcov/
 	rm -rf spark-warehouse/
 	rm -rf .pytest_cache/
-	rm -rf .coverage*
+	rm -rf .coverage
+	rm -rf .coverage.*/
 	rm -rf tmp/*
+
+
+json_fixtures: clean_json_fixtures
+	python3 "$(SRC_DIR)/make_json_fixtures.py"
 
 configure:
 	pip install -r requirements.txt
@@ -38,10 +48,11 @@ test:
 	# been in progress in another thread when fork() was called.
 	OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES \
 	pytest \
+		$(PROJECT_TESTS) $(BIRGITTA_TESTS) \
 		--cov=birgitta \
+		--cov=examples/organizations \
 		--cov-report html \
 		--cov-report term-missing \
 		--cov-fail-under $(COV_MIN) \
-		$(BIRGITTA_TESTS)
 
 .PHONY: build clean configure lint test

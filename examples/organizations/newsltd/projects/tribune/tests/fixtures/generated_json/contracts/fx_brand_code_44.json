@@ -1,0 +1,18 @@
+[
+    {
+        "brand_code": 44,
+        "contract_prod_code": "PAPERVERSION",
+        "customer_id": 11220,
+        "end_date": "2019-03-01T01:00:00.000+01:00",
+        "group_account_id": 3335412,
+        "phone": "G4799999990",
+        "product": "Regular Paper",
+        "product_name": "Regular paper edition",
+        "product_payment_type": "Paper",
+        "sales_agent": "A",
+        "segment": "Private",
+        "sequence_no": "2233444",
+        "shop_code": "ONLINE",
+        "start_date": "2019-01-01T01:00:00.000+01:00"
+    }
+]
