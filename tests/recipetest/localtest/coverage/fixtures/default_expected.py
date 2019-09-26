@@ -32,9 +32,9 @@ co2 = co \
     .filter("client != 1235")
 log_transform(co2, 27, "co2 = co ")
 
-co3 = co2 \ 
+co3 = co2 \
     .filter("client != 1236")
-log_transform(co3, 30, "co3 = co2  ")
+log_transform(co3, 30, "co3 = co2 ")
 # ------- NOTEBOOK-CELL: CODE
 dataframe.write(commit_out, "commit_hist")
 foo = commit_out

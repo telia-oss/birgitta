@@ -1,6 +1,11 @@
 dist: xenial
+group: edge
 language: python
 python: 3.6.6
+env:
+  # Hack to get JAVA_HOME and PATH correct even if `language` above is not Java
+  - PATH=$(echo "$PATH" | sed -e 's/:\/usr\/local\/lib\/jvm\/openjdk11\/bin//')
+  - JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
 cache:
   directories:
     - $HOME/.ivy2
@@ -9,10 +14,16 @@ cache:
     - $HOME/.pip-cache
     - $HOME/.sbt/launchers
 jdk:
-  - oraclejdk8
+  - openjdk8 # oracle is no longer supported by travis, only openjdk
 sudo: false
+addons:
+  apt:
+    packages:
+      - axel
 install:
   # Download spark 2.3.3
+  # - jdk_switcher use oraclejdk8 # cmd not found
+  - export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64 # Hack to get JAVA_HOME and PATH correct even if `language` above is not Java
   - "[ -f spark ] || mkdir spark && cd spark && axel http://archive.apache.org/dist/spark/spark-2.3.3/spark-2.3.3-bin-hadoop2.7.tgz && cd .."
   - "tar -xf ./spark/spark-2.3.3-bin-hadoop2.7.tgz"
   - "export SPARK_HOME=`pwd`/spark-2.3.3-bin-hadoop2.7"
