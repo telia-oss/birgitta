@@ -14,4 +14,4 @@ jupyter==1.0.0
 pip==19.0.3
 wheel==0.33.1
 twine==1.13.0
-coveralls==1.6.0
+coveralls==1.8.2
