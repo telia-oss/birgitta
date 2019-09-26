@@ -1,7 +1,7 @@
 # Birgitta
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://en.wikipedia.org/wiki/MIT_License)
-[![Build Status](https://travis-ci.org/telia-oss/birgitta.svg?branch=master)](https://travis-ci.org/telia-oss/birgitta)
+[![Build Status](https://travis-ci.com/telia-oss/birgitta.svg?branch=master)](https://travis-ci.org/telia-oss/birgitta)
 [![PyPI](https://img.shields.io/pypi/v/birgitta.svg)](https://pypi.python.org/pypi/birgitta)
 [![Coverage Status](https://coveralls.io/repos/github/telia-oss/birgitta/badge.svg?branch=master)](https://coveralls.io/github/telia-oss/birgitta?branch=master)
 
