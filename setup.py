@@ -1,16 +1,25 @@
-from codecs import open
-from os import getenv
 from os import path
 
 from setuptools import find_packages
 from setuptools import setup
 
 
-version = getenv('APP_VERSION')
+version = '0.1.3'
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+long_description = """Birgitta is a Python ETL test and schema framework,
+providing automated tests for pyspark notebooks/recipes.
+
+Birgitta allows doing solid ETL and ML, while still liberally
+allowing imperfect notebook code, enabling a
+`DataOps <https://www.dataopsmanifesto.org>`_ way of
+working which is both solid and agile, not killing
+Data Scientist flexibility by excessive coding standards in notebooks.
+
+In addition to running recipetests on your local dev machine or on
+a CI/CD server, there is support for running recipetests
+as [Dataiku](https://www.dataiku.com] DSS Scenarios.
+"""
 
 setup(
     name='birgitta',
