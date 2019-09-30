@@ -1,6 +1,6 @@
 """Prepend to all pyspark recipes run by localtest
 """
-from birgitta import timing
+PREPEND = """from birgitta import timing
 
 import sys
 
@@ -20,3 +20,10 @@ sys.modules['dataiku'] = mock.MagicMock()
 sys.modules['dataiku.spark'] = mock.MagicMock()
 
 timing.time("script_prepend after magicmock")
+"""
+
+__all__ = ['code']
+
+
+def code():
+    return PREPEND

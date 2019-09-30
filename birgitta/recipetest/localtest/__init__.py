@@ -10,7 +10,7 @@ from birgitta import glob
 from birgitta import timing
 from birgitta.recipetest import localtest
 from birgitta.recipetest.coverage import report
-from birgitta.recipetest.localtest import fixturing, assertion  # noqa 401
+from birgitta.recipetest.localtest import fixturing, assertion, script_prepend  # noqa 401
 from birgitta.recipetest.coverage.report import cov_report, dbg_counts, cov_results  # noqa 401
 from birgitta.recipetest.coverage.transform import prepare
 
@@ -153,14 +153,8 @@ def process_recipe(path,
                              in_fixture_fns,
                              tmpdir,
                              spark_session)
-    full_code = prepend_code() + code_w_reporting
+    full_code = script_prepend.code() + code_w_reporting
     execute_recipe(full_code, globals_dict)
-
-
-def prepend_code():
-    with open("birgitta/recipetest/localtest/script_prepend.py") as f:
-        code = f.read()
-    return code
 
 
 def dump_test_recipe(test_case, tmpdir, code):
