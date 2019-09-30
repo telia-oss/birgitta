@@ -213,3 +213,12 @@ def format_dt(dt):
 
 def set_timezone(pydt):
     return pydt.replace(tzinfo=timezone.utc)
+
+
+def date_types_to_str(val):
+    """Convert data types to string. Used to avoid conversion bugs."""
+    if type(val) == datetime.date:
+        return val.strftime('%Y-%m-%d %H:%M:%S')
+    if type(val) == datetime.datetime:
+        return val.strftime('%Y-%m-%d')
+    return val
