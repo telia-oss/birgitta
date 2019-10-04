@@ -1,0 +1,13 @@
+[
+    {
+        "accountid": 6669999,
+        "cellphone": "99999990",
+        "customerid": 11220,
+        "enddate_yyyymmdd": "2019-03-01",
+        "groupid": 1111222,
+        "priceplan_code": "C574",
+        "priceplan_price": 103.2,
+        "startdate_yyyymmdd": "2019-01-01",
+        "status": 0
+    }
+]
