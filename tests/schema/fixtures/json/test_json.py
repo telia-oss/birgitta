@@ -1,16 +1,16 @@
 import json
-import re
+import os
 
+import fixtureorg.bookltd
 import pytest  # noqa 401
 from birgitta.schema.fixtures import json as fx_json
 
 
 def test_make(tmpdir):
-    dst_dir = tmpdir.mkdir("json_fixtures")
-    result_json_file = F"{dst_dir}/projects/tribune/tests/fixtures/generated_json/filtered_contracts/fx_default.json"  # noqa 501
-    fx_json.make('examples.organizations.newsltd', dst_dir)
-    repo_dir = repo_root(__file__)
-    expected_json_file = F"{repo_dir}/tests/schema/fixtures/expected/filtered_contracts/fx_default.json"  # noqa 501
+    root_dir = org_root(__file__)
+    result_json_file = F"{root_dir}/fixtureorg/bookltd/projects/ignatius/tests/fixtures/generated_json/contract_data/fx_default.json"  # noqa 501
+    fx_json.make(fixtureorg.bookltd)
+    expected_json_file = F"{root_dir}/expected/contract_data/fx_default.json"  # noqa 501
     assert_json_files_equal(
         expected_json_file,
         result_json_file
@@ -28,5 +28,5 @@ def read_json_file(file_path):
         return json.load(json_file)
 
 
-def repo_root(file_path):
-    return re.search('(^.*/birgitta)/tests', file_path)[1]
+def org_root(file_path):
+    return os.path.dirname(os.path.realpath(__file__))

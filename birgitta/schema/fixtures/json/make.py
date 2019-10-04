@@ -12,17 +12,31 @@ from birgitta import spark
 __all__ = ['make']
 
 
-def make(organization_mod_name, dst_dir):
+def make(org_mod):
     """Make json fixtures from the fixture definitions
     found in the projects under an organization module.
 
     Parameters:
-    organization_mod_name (string): Full module name of org
+    org_mod (module): Full module name of org
 
     Returns:
     object:Imported python module
 """
-    mod_from_name(organization_mod_name)
+    dst_dir = os.path.dirname(org_mod.__file__)
+    internal_make(org_mod, dst_dir)
+
+
+def internal_make(org_mod, dst_dir):
+    """Make json fixtures from the fixture definitions
+    found in the projects under an organization module.
+
+    Parameters:
+    org_mod (module): Full module name of org
+
+    Returns:
+    object:Imported python module
+"""
+    organization_mod_name = org_mod.__name__
     projects_mod_name = F"{organization_mod_name}.projects"
     projects = mod_from_name(projects_mod_name)
     for proj_mod in submods(projects):

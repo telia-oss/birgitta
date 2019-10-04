@@ -97,10 +97,20 @@ You must then create a schema object, as seen [here](examples/organizations/news
 
 ## Generating json fixtures from your python fixture definitions
 
-To generate json fixtures examples for the fixtures defined in the projects under the example `newsltd` organization in the directory `examples/organizations/newsltd`, run:
+To generate json fixtures examples for the fixtures defined in the projects under the example `newsltd` organization in the directory `examples/organizations/newsltd`, add a script to your repository root called something like make_json_fixtures.py, with the following content:
 
-```bash
-birgitta json-fixtures examples.organizations.newsltd
+```python
+import examples.organizations.newsltd
+from birgitta.schema.fixtures import json as fx_json
+
+
+fx_json.make(examples.organizations.newsltd)
+```
+
+Run it with:
+
+```python
+python make_json_fixtures.py
 ```
 
 ## Catalogs

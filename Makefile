@@ -1,4 +1,4 @@
-COV_MIN = 85 # Gradually increase this as we add more tests
+COV_MIN = 87 # Gradually increase this as we add more tests
 TAG = latest
 
 SRC_DIR = $(shell pwd)
@@ -30,7 +30,7 @@ clean:
 
 
 json_fixtures: clean_json_fixtures
-	python3 "$(SRC_DIR)/make_json_fixtures.py"
+	python "$(SRC_DIR)/make_json_fixtures.py"
 
 configure:
 	pip install -r requirements.txt
@@ -53,6 +53,6 @@ test:
 		--cov=examples/organizations \
 		--cov-report html \
 		--cov-report term-missing \
-		--cov-fail-under $(COV_MIN) \
+		--cov-fail-under $(COV_MIN)
 
 .PHONY: build clean configure lint test
