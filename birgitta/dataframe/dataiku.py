@@ -1,7 +1,9 @@
 """Functions for loading and writing dataiku spark dataframes."""
-
-import dataiku
-import dataiku.spark as dkuspark
+try:  # Enable modules importing this module to load even if it isn't used # noqa 501
+    import dataiku
+    import dataiku.spark as dkuspark
+except ImportError:
+    pass
 
 __all__ = ['get', 'write']
 
