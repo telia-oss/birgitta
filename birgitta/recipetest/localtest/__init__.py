@@ -1,13 +1,12 @@
 """Functionality for running fixture based test cases.
 """
 import os
-import sys
-import traceback
 from functools import partial
 
 import pytest
 from birgitta import glob
 from birgitta import timing
+from birgitta.recipe import runner
 from birgitta.recipetest import localtest
 from birgitta.recipetest.coverage import report
 from birgitta.recipetest.localtest import fixturing, assertion, script_prepend  # noqa 401
@@ -154,7 +153,9 @@ def process_recipe(path,
                              tmpdir,
                              spark_session)
     full_code = script_prepend.code() + code_w_reporting
-    execute_recipe(full_code, globals_dict)
+    timing.time("execute_recipe before exec")
+    runner.exec_code(full_code, globals_dict)
+    timing.time("execute_recipe after exec")
 
 
 def dump_test_recipe(test_case, tmpdir, code):
@@ -162,36 +163,3 @@ def dump_test_recipe(test_case, tmpdir, code):
     print("\nTest recipe python file:\n", repr(dump_path), "\n")
     with open(dump_path, "w") as f:
         f.write(code)
-
-
-def execute_recipe(code, globals_dict):
-    """Execute the recipe and handle error conditions.
-    """
-    e = False
-    try:
-        timing.time("execute_recipe before exec")
-        exec(code, globals_dict)
-        timing.time("execute_recipe after exec")
-    except SyntaxError as err:
-        error_class = err.__class__.__name__
-        # detail = err.args[0]
-        lineno = err.lineno
-        e = err
-    except Exception as err:
-        error_class = err.__class__.__name__
-        # detail = err.args[0]
-        cl, exc, tb = sys.exc_info()
-        lineno = traceback.extract_tb(tb)[-1][1]
-        e = err
-    if e:
-        lines = code.splitlines()
-        lenlines = len(lines)
-        if lineno < lenlines:
-            print("Recipe execution",
-                  error_class,
-                  "at recipe line:\n",
-                  lines[lineno-1])
-        else:
-            print("Recipe execution",
-                  error_class)
-        raise e

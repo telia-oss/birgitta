@@ -10,14 +10,20 @@ import datetime
 
 
 class Glob():
+    TODAY = datetime.date.today()
+
+
+def reset():
     # BIRGITTA_DATASET_STORAGE = "DATAIKU"  # Store fixtures in Dataiku
     # BIRGITTA_DATASET_STORAGE = "MEM"  # Store fixtures in dfs in memory
-    BIRGITTA_DATASET_STORAGE = "FILE"  # Store fixtures in parquet files
-    BIRGITTA_FILEBASED_DATASETS = None
-    BIRGITTA_MEMBASED_DATASETS = None
-    BIRGITTA_TEST_COVERAGE = {}
-    BIRGITTA_DATASET_OVERRIDES = None
-    TODAY = datetime.date.today()
+    Glob.BIRGITTA_DATASET_STORAGE = "FILE"  # Store fixtures in parquet files
+    Glob.BIRGITTA_FILEBASED_DATASETS = None
+    Glob.BIRGITTA_MEMBASED_DATASETS = None
+    Glob.BIRGITTA_TEST_COVERAGE = {}
+    Glob.BIRGITTA_DATASET_OVERRIDES = None
+
+
+reset()  # Init glob
 
 
 def get(key, default=None):
