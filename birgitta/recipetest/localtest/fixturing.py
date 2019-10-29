@@ -1,7 +1,7 @@
-"""
+"""Module for test case fixturing functions.
 """
 from birgitta import timing
-from birgitta.dataframe import filebased, membased, storage
+
 
 __all__ = ['obtain_fixture_fns', 'write_fixtures']
 
@@ -21,7 +21,7 @@ def obtain_fixture_fns(datasets, fixture_name):
     return fixture_fns
 
 
-def write_fixtures(globals_dict, fixture_fns, tmpdir, spark_session):
+def write_fixtures(globals_dict, fixture_fns, dataframe_source, spark_session):
     """Write fixtures to storage.
 
     Args:
@@ -31,21 +31,8 @@ def write_fixtures(globals_dict, fixture_fns, tmpdir, spark_session):
         fixture_fns
     """
     timing.time("write_fixtures start")
-    if storage.stored_in("MEM"):
-        write_membased_fixtures(globals_dict, fixture_fns)
-    else:
-        globals_dict["BIRGITTA_MEMBASED_DATASETS"] = False
-        write_filebased_fixtures(fixture_fns, tmpdir, spark_session)
-    timing.time("write_fixtures end")
-
-
-def write_membased_fixtures(globals_dict, fixture_fns):
-    globals_dict["BIRGITTA_MEMBASED_DATASETS"] = membased.conf_sets(
-        fixture_fns)
-
-
-def write_filebased_fixtures(fixture_fns, tmpdir, spark_session):
     # FUTURE: Try writing directly to parquet using pyarrow instead. Could be faster. # noqa 501
     for dataframe_key in fixture_fns.keys():
         df = fixture_fns[dataframe_key](spark_session)
-        filebased.write(df, dataframe_key, tmpdir)
+        dataframe_source.write(df, dataframe_key)
+    timing.time("write_fixtures end")

@@ -4,8 +4,8 @@ import os
 from functools import partial
 
 import pytest
-from birgitta import glob
 from birgitta import timing
+from birgitta.dataframesource.sources.localsource import LocalSource
 from birgitta.recipe import runner
 from birgitta.recipetest import localtest
 from birgitta.recipetest.coverage import report
@@ -102,22 +102,24 @@ def run_case(tmpdir,
     """
     timing.time("run_case_fn start: %s" % (fixture_name))
     # in_fixtures duration: approx 2 secs
+    tdir = tmpdir.strpath
+    dataframe_source = LocalSource({'dataset_dir': tdir})
     in_fixture_fns = fixturing.obtain_fixture_fns(in_datasets,
                                                   fixture_name)
     # out_fixtures duration: approx 0.05 secs
     out_fixture_fns = fixturing.obtain_fixture_fns(out_datasets,
                                                    fixture_name)
-    tdir = tmpdir.strpath
     # process_recipe duration: approx 7.2 secs
     localtest.process_recipe(recipe_path,
                              tdir,
+                             dataframe_source,
                              cov_report_file,
                              test_case,
                              in_fixture_fns,
                              spark_session)
     timing.time("runcase_fn run_script done: %s" % (fixture_name))
     assertion.assert_outputs(out_fixture_fns,
-                             tdir,
+                             dataframe_source,
                              spark_session)
     report.collect(cov_report_file, test_case, cov_results)
     timing.time("run_case_fn end: %s" % (fixture_name))
@@ -125,7 +127,8 @@ def run_case(tmpdir,
 
 
 def process_recipe(path,
-                   tmpdir,
+                   tdir,
+                   dataframe_source,
                    cov_report_file,
                    test_case,
                    in_fixture_fns,
@@ -135,24 +138,21 @@ def process_recipe(path,
     with open(path) as f:
         code = f.read()
     code_w_reporting = prepare(code)
-    dump_test_recipe(test_case, tmpdir, code_w_reporting)
     cov_dict = {}
     cov_dict["cov_report_file"] = cov_report_file
     cov_dict["test_case"] = test_case
 
     globals_dict = {
-        "BIRGITTA_DATASET_STORAGE": glob.get("BIRGITTA_DATASET_STORAGE"),
+        "BIRGITTA_SPARK_SESSION_TYPE": "LOCAL",
         "BIRGITTA_TEST_COVERAGE": cov_dict,
-        "BIRGITTA_DBG_COUNTS": dbg_counts(),
-        "BIRGITTA_FILEBASED_DATASETS": {
-            "dataset_dir": tmpdir
-        }
+        "BIRGITTA_DBG_COUNTS": dbg_counts()
     }
     fixturing.write_fixtures(globals_dict,
                              in_fixture_fns,
-                             tmpdir,
+                             dataframe_source,
                              spark_session)
-    full_code = script_prepend.code() + code_w_reporting
+    full_code = script_prepend.code(tdir) + code_w_reporting
+    dump_test_recipe(test_case, tdir, full_code)
     timing.time("execute_recipe before exec")
     runner.exec_code(full_code, globals_dict)
     timing.time("execute_recipe after exec")

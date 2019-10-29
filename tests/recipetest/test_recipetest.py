@@ -20,6 +20,11 @@ sys.modules['dataiku'] = dku_mock
 sys.modules['dataikuapi'] = mock.MagicMock()
 sys.modules['dataikuapi.dss'] = mock.MagicMock()
 sys.modules['dataikuapi.dss.recipe'] = mock.MagicMock()
+
+import dataiku  # noqa E402
+import dataiku.spark as dkuspark  # noqa E402
+from birgitta.dataframesource import contextsource  # noqa E402
+from birgitta.dataframesource.sources.dataikusource import DataikuSource  # noqa E402
 from birgitta.dataiku.recipetest import scenariotest  # noqa E402
 from birgitta.schema.spark import to_spark  # noqa E402
 
@@ -87,7 +92,9 @@ def test_no_assert(sqlContext,
                    test_params,
                    src_project_key,
                    src_recipe_key,
-                   testbench_project_key):
+                   testbench_project_key,
+                   tmpdir):
+    contextsource.set(DataikuSource())
     scenariotest.test_recipe(sqlContext,
                              scenario,
                              src_project_key,

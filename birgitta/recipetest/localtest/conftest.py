@@ -1,7 +1,7 @@
 """Helpers and imports for pyspark unit tests
 """
 import pytest
-from birgitta import glob
+from birgitta import context
 from birgitta import spark
 from birgitta.schema.fixtures import values
 
@@ -17,4 +17,4 @@ def spark_session():
     return spark.local_session()  # duration: about 3secs
 
 
-glob.set("TODAY", values.today())
+context.set("TODAY", values.today())

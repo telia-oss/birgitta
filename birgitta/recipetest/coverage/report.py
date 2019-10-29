@@ -7,7 +7,7 @@ import json
 import os
 
 import pytest
-from birgitta import glob
+from birgitta import context
 from birgitta import timing
 
 __all__ = [
@@ -57,8 +57,8 @@ def log_transform(var, line_no, line_str):
         line_no (int): The line number of the original code line
         line_str (str): The original code line
     """
-    report_file = glob.get("BIRGITTA_TEST_COVERAGE")["cov_report_file"]
-    test_case = glob.get("BIRGITTA_TEST_COVERAGE")["test_case"]
+    report_file = context.get("BIRGITTA_TEST_COVERAGE")["cov_report_file"]
+    test_case = context.get("BIRGITTA_TEST_COVERAGE")["test_case"]
     type_name = type(var).__name__
     metrics = {"var_type": type_name}
     if type_name == "DataFrame":

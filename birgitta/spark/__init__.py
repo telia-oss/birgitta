@@ -1,8 +1,8 @@
 """Spark wrapper functions to enable abstractions and testing.
 """
 import pyspark
+from birgitta import context
 from birgitta import timing
-from birgitta.dataframe import storage
 from pyspark.sql import SparkSession
 from pyspark.sql import SQLContext
 
@@ -51,7 +51,7 @@ def make_sql_ctx(spark_session):
 
 
 def is_local():
-    return storage.stored_in("MEM") or storage.stored_in("FILE")
+    return context.get("BIRGITTA_SPARK_SESSION_TYPE")
 
 
 def conf_spark():

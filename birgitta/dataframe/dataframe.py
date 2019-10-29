@@ -8,11 +8,7 @@ cast_binary_cols_to_string() is a utility function to deal with
 binary to string conversion of a spark dataframe."""
 
 import pandas as pd
-from birgitta.dataframe import dataiku as bdataiku
-from birgitta.dataframe import filebased
-from birgitta.dataframe import membased
-from birgitta.dataframe import storage
-from birgitta.dataset import override
+from birgitta.dataframesource import contextsource
 from pyspark.sql import functions
 
 __all__ = ['get', 'write', 'cast_binary_cols_to_string']
@@ -20,7 +16,7 @@ __all__ = ['get', 'write', 'cast_binary_cols_to_string']
 
 def get(sqlContext,
         dataset_name,
-        project_key=None,
+        prefix=None,
         *,
         cast_binary_to_str=False):
     """Obtain a dataframe. It will adjust to whatever
@@ -30,8 +26,8 @@ def get(sqlContext,
     Args:
         sqlContext (SqlContext): spark sql context used to load data frames.
         dataset_name (str): The data set to load.
-        project_key (str): Used if data set in a separate dataiku project.
-        (default is False).
+        prefix (str): Prefix path or dataiku project_key for loading
+        the data set.
 
     Kwargs:
         cast_binary_to_str (bool): Convert binary to str.
@@ -39,13 +35,8 @@ def get(sqlContext,
     Returns:
        Spark DataFrame.
     """
-    dataset_name = override.override_if_set(dataset_name)
-    if storage.stored_in("MEM"):
-        ret = membased.get(dataset_name, sqlContext.sparkSession)
-    elif storage.stored_in("FILE"):
-        ret = filebased.get(dataset_name)
-    else:
-        ret = bdataiku.get(dataset_name, project_key, sqlContext)
+    dataframe_source = contextsource.get()
+    ret = dataframe_source.load(dataset_name, prefix, sqlContext)
     if cast_binary_to_str:
         ret = cast_binary_cols_to_string(ret)
     return ret
@@ -53,7 +44,7 @@ def get(sqlContext,
 
 def write(df,
           dataset_name,
-          project_key=None,
+          prefix=None,
           *,
           schema=None):
     """Write a dataframe to storage. It will adjust to whatever
@@ -63,8 +54,8 @@ def write(df,
     Args:
         df (DataFrame): spark data frame to write.
         dataset_name (str): The data set to load.
-        project_key (str): Used if data set in a separate dataiku project.
-        (default is False).
+        prefix (str): Prefix path or dataiku project_key for loading
+        the data set.
 
     Kwargs:
         schema (Schema): Birgitta schema to apply on write.
@@ -74,11 +65,8 @@ def write(df,
     """
     if schema:
         df = schema.enforce(df)
-    dataset_name = override.override_if_set(dataset_name)
-    if storage.stored_in("MEM") or storage.stored_in("FILE"):
-        return filebased.write(df, dataset_name)
-    else:
-        return bdataiku.write(df, dataset_name, project_key)
+    dataframe_source = contextsource.get()
+    return dataframe_source.write(df, dataset_name, prefix)
 
 
 def cast_binary_cols_to_string(df):
