@@ -17,12 +17,12 @@ class LocalSource(DataframeSourceBase):
         else:
             self.dataset_dir = None
 
-    def load(self, dataset_name, prefix, sqlContext):
+    def load(self, spark_session, dataset_name, prefix):
         dataset_dir = prefix  # Interpret prefix as dataset_dir
         if not dataset_dir:
             dataset_dir = self.dataset_dir
         try:
-            return sqlContext.read.parquet(
+            return spark_session.read.parquet(
                 "%s/%s/" % (dataset_dir, dataset_name))
         except AnalysisException as e:
             if "Path does not exist" in str(e):

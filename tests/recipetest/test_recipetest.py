@@ -2,7 +2,7 @@ import sys
 
 import mock
 import pytest
-from pyspark.sql import SQLContext
+from pyspark.sql import SparkSession
 
 
 # Mock dataiku sys libs, not available in pip
@@ -30,8 +30,8 @@ from birgitta.schema.spark import to_spark  # noqa E402
 
 
 @pytest.fixture()
-def sqlContext(mocker):
-    return mocker.MagicMock(SQLContext)
+def spark_session(mocker):
+    return mocker.MagicMock(SparkSession)
 
 
 @pytest.fixture()
@@ -87,7 +87,7 @@ def testbench_project_key():
     return 'EXAMPLEPROJ_TESTBENCH'
 
 
-def test_no_assert(sqlContext,
+def test_no_assert(spark_session,
                    scenario,
                    test_params,
                    src_project_key,
@@ -95,7 +95,7 @@ def test_no_assert(sqlContext,
                    testbench_project_key,
                    tmpdir):
     contextsource.set(DataikuSource())
-    scenariotest.test_recipe(sqlContext,
+    scenariotest.test_recipe(spark_session,
                              scenario,
                              src_project_key,
                              src_recipe_key,

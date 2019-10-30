@@ -17,7 +17,7 @@ class DataframeSourceBase(metaclass=ABCMeta):
         self.params = params
 
     @abstractmethod
-    def load(self, dataset_name, prefix, sqlContext):
+    def load(self, spark_session, dataset_name, prefix):
         """Method for getting a data frame.
 
         Args:

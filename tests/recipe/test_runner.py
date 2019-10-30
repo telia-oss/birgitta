@@ -24,8 +24,8 @@ def test_syntax_error(dataframe_source):
     context.reset()
     replacements = [
         {
-            "old": "sql_context = ",
-            "new": "sql_contesdaf@_0=~> = "
+            "old": "spark_session = ",
+            "new": "spark_sesssdaf@_0=~> = "
         }
     ]
     with pytest.raises(SyntaxError):

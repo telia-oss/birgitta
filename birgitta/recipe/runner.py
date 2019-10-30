@@ -62,8 +62,8 @@ def run(root_mod, recipe, dataframe_source, replacements=[]):
 
         [
             {
-                "old": "dataframe.get(sql_context, ds_foo.name)",
-                "new": "dataframe.get(sql_context, ds_foo.name).limit(10)"
+                "old": "dataframe.get(spark_session, ds_foo.name)",
+                "new": "dataframe.get(spark_session, ds_foo.name).limit(10)"
             }
         ]
 

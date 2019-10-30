@@ -1,6 +1,5 @@
 """Data frame assertion helpers
 """
-from birgitta import spark as bspark
 from pandas.util.testing import assert_frame_equal
 
 __all__ = ['assert_outputs']
@@ -10,8 +9,7 @@ def assert_outputs(expected_fixtures, dataframe_source, spark_session):
     """Assert that the expected fixtures are equal to the
     produced outputs. Improves exception presentation."""
     for df_key in expected_fixtures.keys():
-        sql_ctx = bspark.local_sql_ctx(spark_session)
-        result_df = dataframe_source.load(df_key, None, sql_ctx)
+        result_df = dataframe_source.load(spark_session, df_key, None)
         expected_df = expected_fixtures[df_key](spark_session)
         result_panda = to_pandas(result_df)
         expected_panda = to_pandas(expected_df)

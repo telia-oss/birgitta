@@ -6,7 +6,7 @@ from birgitta.dataiku.recipe import manage as recipe_manage
 from birgitta.recipetest import validate
 
 
-def test_recipe(sqlContext,
+def test_recipe(spark_session,
                 scenario,
                 src_project_key,
                 src_recipe_key,
@@ -75,7 +75,7 @@ def test_recipe(sqlContext,
         print('Validate output')
         for dataset_name in test_case['outputs']:
             print('Validate output dataset: %s' % (dataset_name))
-            validate.datasets(sqlContext,
+            validate.datasets(spark_session,
                               dataset_name,
                               expected_name(dataset_name),
                               testbench_project_key)

@@ -14,7 +14,7 @@ from pyspark.sql import functions
 __all__ = ['get', 'write', 'cast_binary_cols_to_string']
 
 
-def get(sqlContext,
+def get(spark_session,
         dataset_name,
         prefix=None,
         *,
@@ -36,7 +36,7 @@ def get(sqlContext,
        Spark DataFrame.
     """
     dataframe_source = contextsource.get()
-    ret = dataframe_source.load(dataset_name, prefix, sqlContext)
+    ret = dataframe_source.load(spark_session, dataset_name, prefix)
     if cast_binary_to_str:
         ret = cast_binary_cols_to_string(ret)
     return ret

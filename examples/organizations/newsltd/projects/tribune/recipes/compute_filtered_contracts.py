@@ -12,9 +12,9 @@ from examples.organizations.newsltd.projects.tribune.datasets.contracts import d
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 #  Get or create sparkcontext and set up sqlcontext
-sql_context = bspark.sql_ctx()
+spark_session = bspark.session()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-contracts = dataframe.get(sql_context,
+contracts = dataframe.get(spark_session,
                      ds_contracts.name,
                      cast_binary_to_str=True)
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: MARKDOWN

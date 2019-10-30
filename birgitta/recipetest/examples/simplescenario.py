@@ -1,12 +1,10 @@
-import pyspark
+from birgitta import spark as bspark
 from birgitta.recipetest import recipetest
 from birgitta.schema.spark import to_spark
 from dataiku.scenario import Scenario
-from pyspark.sql import SQLContext
 
 
-sc = pyspark.SparkContext()
-sqlContext = SQLContext(sc)
+spark_session = bspark.session()
 
 scenario = Scenario()
 src_project_key = 'TRIBUNE'
@@ -42,7 +40,7 @@ test_params = {
     ]
 }
 
-recipetest.test_recipe(sqlContext,
+recipetest.test_recipe(spark_session,
                        scenario,
                        src_project_key,
                        src_recipe_key,

@@ -2,20 +2,28 @@
 """
 import dataiku
 import dataiku.spark as dkuspark
+import pyspark
 from birgitta.dataframesource import DataframeSourceBase
+from pyspark.sql import SQLContext
+
 
 __all__ = ['DataikuSource']
 
 
 class DataikuSource(DataframeSourceBase):
-    def load(self, dataset_name, prefix, sqlContext):
+    def load(self, spark_session, dataset_name, prefix):
         """When prefix is None use same project as recipe is in."""
         project_key = prefix  # Assume that prefix is a valid project_key
         dataset = dataiku.Dataset(dataset_name, project_key)
-        return dkuspark.get_dataframe(sqlContext, dataset)
+        sql_ctx = self.dataiku_sql_ctx()
+        return dkuspark.get_dataframe(sql_ctx, dataset)
 
     def write(self, df, dataset_name, prefix):
         """When project_key is None use same project as recipe is in."""
         project_key = prefix  # Assume that prefix is a valid project_key
         dataset = dataiku.Dataset(dataset_name, project_key)
         dkuspark.write_with_schema(dataset, df)
+
+    def dataiku_sql_ctx(self):
+        sc = pyspark.SparkContext.getOrCreate()
+        return SQLContext(sc)
