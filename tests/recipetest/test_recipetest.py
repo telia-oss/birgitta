@@ -2,7 +2,7 @@ import sys
 
 import mock
 import pytest
-from pyspark.sql import SQLContext
+from pyspark.sql import SparkSession
 
 
 # Mock dataiku sys libs, not available in pip
@@ -20,13 +20,18 @@ sys.modules['dataiku'] = dku_mock
 sys.modules['dataikuapi'] = mock.MagicMock()
 sys.modules['dataikuapi.dss'] = mock.MagicMock()
 sys.modules['dataikuapi.dss.recipe'] = mock.MagicMock()
+
+import dataiku  # noqa E402
+import dataiku.spark as dkuspark  # noqa E402
+from birgitta.dataframesource import contextsource  # noqa E402
+from birgitta.dataframesource.sources.dataikusource import DataikuSource  # noqa E402
 from birgitta.dataiku.recipetest import scenariotest  # noqa E402
 from birgitta.schema.spark import to_spark  # noqa E402
 
 
 @pytest.fixture()
-def sqlContext(mocker):
-    return mocker.MagicMock(SQLContext)
+def spark_session(mocker):
+    return mocker.MagicMock(SparkSession)
 
 
 @pytest.fixture()
@@ -82,13 +87,15 @@ def testbench_project_key():
     return 'EXAMPLEPROJ_TESTBENCH'
 
 
-def test_no_assert(sqlContext,
+def test_no_assert(spark_session,
                    scenario,
                    test_params,
                    src_project_key,
                    src_recipe_key,
-                   testbench_project_key):
-    scenariotest.test_recipe(sqlContext,
+                   testbench_project_key,
+                   tmpdir):
+    contextsource.set(DataikuSource())
+    scenariotest.test_recipe(spark_session,
                              scenario,
                              src_project_key,
                              src_recipe_key,

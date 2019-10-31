@@ -1,21 +1,21 @@
 import dataiku
-from birgitta import glob
+from birgitta import context
 from birgitta.dataiku.dataset import manage as dataset_manage
 from birgitta.dataiku.dataset.manage import schema
 from birgitta.dataiku.recipe import manage as recipe_manage
 from birgitta.recipetest import validate
 
 
-def test_recipe(sqlContext,
+def test_recipe(spark_session,
                 scenario,
                 src_project_key,
                 src_recipe_key,
                 testbench_project_key,
                 test_params):
     # Trigger dataiku, not parquet
-    glob.set("BIRGITTA_DATASET_STORAGE", "DATAIKU")
+    context.set("BIRGITTA_DATASET_STORAGE", "DATAIKU")
     # Trigger dataiku, not parquet
-    glob.set("BIRGITTA_S3_BUCKET", "birgitta_s3_bucket")
+    context.set("BIRGITTA_S3_BUCKET", "birgitta_s3_bucket")
     print('####################################################')
     print('Test recipe: %s (in project %s)' % (src_recipe_key,
                                                src_project_key))
@@ -75,7 +75,7 @@ def test_recipe(sqlContext,
         print('Validate output')
         for dataset_name in test_case['outputs']:
             print('Validate output dataset: %s' % (dataset_name))
-            validate.datasets(sqlContext,
+            validate.datasets(spark_session,
                               dataset_name,
                               expected_name(dataset_name),
                               testbench_project_key)

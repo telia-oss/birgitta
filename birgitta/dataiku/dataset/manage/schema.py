@@ -1,5 +1,5 @@
 """Utility function for cloning dataiku datasets including schema."""
-from birgitta import glob
+from birgitta import context
 from birgitta.dataiku.dataset import manage as dataset_manage
 
 
@@ -44,7 +44,7 @@ def clone(client,
         #       'parquetFlavor': 'HIVE',
         #       'parquetBlockSizeMB': 128}
     elif dst_dataset_type == "S3":
-        s3_bucket = glob.get('BIRGITTA_S3_BUCKET')
+        s3_bucket = context.get('BIRGITTA_S3_BUCKET')
         dst_dataset_params = {
             'bucket': s3_bucket,
             'connection': 'S3',

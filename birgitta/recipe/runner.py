@@ -47,7 +47,7 @@ def exec_code(code, globals_dict):
     return ret
 
 
-def run(root_mod, recipe, storage, replacements=[]):
+def run(root_mod, recipe, dataframe_source, replacements=[]):
     """Obtain a dataframe. It will adjust to whatever
     storage the environment has set. Currently storage is supported in
     file, memory or dataiku (HDFS).
@@ -55,38 +55,36 @@ def run(root_mod, recipe, storage, replacements=[]):
     Args:
         root_mod (module): The root module on which to base the path.
         recipe (str): Relative path to the recipe file from the module dir.
-        storage (str): Storage type e.g. DATAIKU, FILE
+        dataframe_source (DataframeSourceBase subclass): dataframe source
+            E.g. LocalSource, Dataiku
         replacements (list): List of text replacements to enable recipe
         debugging. Example on how to limit data amount:
 
         [
             {
-                "old": "dataframe.get(sql_context, ds_foo.name)",
-                "new": "dataframe.get(sql_context, ds_foo.name).limit(10)"
+                "old": "dataframe.get(spark_session, ds_foo.name)",
+                "new": "dataframe.get(spark_session, ds_foo.name).limit(10)"
             }
         ]
 
     Returns:
        Output of python exec() function.
     """
-    if storage not in ["DATAIKU", "FILE"]:
-        raise ValueError(f"Storage unknown {storage}")
     mod_path = os.path.dirname(inspect.getfile(root_mod))
     recipe_path = f"{mod_path}/{recipe}"
     with open(recipe_path) as f:
-        code = prepare_code(f.read(), recipe, storage, replacements)
+        code = prepare_code(f.read(), recipe, replacements)
     globals_dict = {
-        'BIRGITTA_DATASET_STORAGE': storage
+        'BIRGITTA_DATAFRAMESOURCE': dataframe_source
     }
     return exec_code(code, globals_dict)
 
 
-def prepare_code(code, recipe, storage, replacements):
+def prepare_code(code, recipe, replacements):
     for replacement in replacements:
         code = code.replace(replacement["old"], replacement["new"])
-    glob_stmts = f"""import glob
-from birgitta import glob
-glob.set("BIRGITTA_DATASET_STORAGE", "{storage}")"""
+    context_stmts = f"""from birgitta.dataframesource import contextsource
+contextsource.set(globals()['BIRGITTA_DATAFRAMESOURCE'])"""
     completed = f"""
 print("=== Recipe {recipe} complete ===")"""
-    return glob_stmts + code + completed
+    return context_stmts + code + completed

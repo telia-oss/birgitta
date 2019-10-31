@@ -11,9 +11,8 @@ warnings.filterwarnings('ignore')  # supress python warnings
 
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-sql_context = bspark.sql_ctx()
-contract_data_df = dataframe.get(sql_context,
-                                     ds_contract_data.name)
+spark_session = bspark.session()
+contract_data_df = dataframe.get(spark_session, ds_contract_data.name)
 
 with_flag = contract_data_df.withColumn('current_flag', F.lit(1))
 

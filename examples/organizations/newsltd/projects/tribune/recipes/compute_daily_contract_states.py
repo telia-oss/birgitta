@@ -15,12 +15,12 @@ from pyspark.sql import functions as f
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 analysis_start_date = datetime.date(2016, 1, 1)
 today_date = recipe_params.today()
-sql_context = bspark.sql_ctx()
+spark_session = bspark.session()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
-filtered_contracts = dataframe.get(sql_context,
+filtered_contracts = dataframe.get(spark_session,
                               ds_filtered_contracts.name,
                               cast_binary_to_str=True)
-datedim = dataframe.get(sql_context, "date_dim")
+datedim = dataframe.get(spark_session, "date_dim")
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 sel_cols = [

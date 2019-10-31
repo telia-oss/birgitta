@@ -1,16 +1,38 @@
 """Spark wrapper functions to enable abstractions and testing.
 """
 import pyspark
+from birgitta import context
 from birgitta import timing
-from birgitta.dataframe import storage
 from pyspark.sql import SparkSession
-from pyspark.sql import SQLContext
 
 
-__all__ = ['local_session', 'sql_ctx']
+__all__ = ['local_session', 'session']
 
 
-def local_session():
+def session(*, conf=None, app_name=None):
+    """Get a local spark session. Used for recipe tests,
+    both running them, and creating fixtures."""
+    if not conf:  # Get default local spark conf
+        conf = {}
+    if not app_name:
+        app_name = 'default_spark_app'
+
+    if is_local():
+        return local_session(app_name=app_name)
+    else:
+        return default_server_session(conf, app_name)
+
+
+def default_server_session(*, conf, app_name):
+    session = (SparkSession.builder
+               .config(conf=conf)
+               .appName(app_name)
+               .getOrCreate())
+    timing.time("spark.default_server_session created/gotten")
+    return session
+
+
+def local_session(*, app_name='birgitta_spark_test'):
     """Get a local spark session. Used for recipe tests,
     both running them, and creating fixtures."""
     conf = conf_spark()
@@ -26,61 +48,21 @@ def local_session():
     session = (SparkSession.builder
                .config(conf=conf)
                .master(master_spark_url)
-               .appName('spark_test')
+               .appName(app_name)
                .getOrCreate())
     timing.time("spark.local_session created/gotten")
     return session
 
 
-def sql_ctx(spark_session=None):
-    """Get an sql context. Currently, we support:
-
-    * local session
-    * dataiku
-    """
-    if is_local():
-        return local_sql_ctx(spark_session)
-    elif spark_session:
-        return make_sql_ctx(spark_session)
-    return dataiku_sql_ctx()
-
-
-def make_sql_ctx(spark_session):
-    sc = spark_session.sparkContext
-    return SQLContext(sc)
-
-
 def is_local():
-    return storage.stored_in("MEM") or storage.stored_in("FILE")
+    return context.get("BIRGITTA_SPARK_SESSION_TYPE")
 
 
 def conf_spark():
     """Configure local spark to be fast for recipe tests."""
-    pyspark.SparkConf().getAll()
-    # Update the default configurations, for higher speed
+    # Speed up config for small test data sets
     conf = pyspark.SparkConf().setAll([
         # No parallelism needed in small data
-        ('spark.sql.shuffle.partitions', 1),
-        #
-        # No speed improvement from any of these settings so far:
-        # ('spark.sql.execution.arrow.enabled', 'true')
-        # ("spark.executor.memoryOverhead", "512m"),
-        # ("spark.dynamicAllocation.maxExecutors", "10"),
-        # ("spark.dynamicAllocation.enabled","false"),
-        # ('spark.executor.memory', '512m'),
-        # ('spark.executor.cores', '2'),
-        # ('spark.cores.max', '8'),
-        # ('spark.driver.memory', '512m')
+        ('spark.sql.shuffle.partitions', 1)
     ])
     return conf
-
-
-def local_sql_ctx(spark_session):
-    if not spark_session:
-        spark_session = local_session()
-    return make_sql_ctx(spark_session)
-
-
-def dataiku_sql_ctx():
-    sc = pyspark.SparkContext.getOrCreate()
-    return SQLContext(sc)
