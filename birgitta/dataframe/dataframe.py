@@ -16,9 +16,10 @@ __all__ = ['get', 'write', 'cast_binary_cols_to_string']
 
 def get(spark_session,
         dataset_name,
-        prefix=None,
         *,
-        cast_binary_to_str=False):
+        prefix=None,
+        cast_binary_to_str=False,
+        dataframe_source=None):
     """Obtain a dataframe. It will adjust to whatever
     storage the environment has set. Currently storage is supported in
     file, memory or dataiku (HDFS).
@@ -26,16 +27,18 @@ def get(spark_session,
     Args:
         sqlContext (SqlContext): spark sql context used to load data frames.
         dataset_name (str): The data set to load.
-        prefix (str): Prefix path or dataiku project_key for loading
-        the data set.
 
     Kwargs:
+        prefix (str): Prefix path or dataiku project_key for loading
+        the data set.
         cast_binary_to_str (bool): Convert binary to str.
-
+        dataframe_source (DataframeSourceBase): Option to override
+        the data frame source defined in the context.
     Returns:
        Spark DataFrame.
     """
-    dataframe_source = contextsource.get()
+    if not dataframe_source:
+        dataframe_source = contextsource.get()
     ret = dataframe_source.load(spark_session, dataset_name, prefix)
     if cast_binary_to_str:
         ret = cast_binary_cols_to_string(ret)
@@ -44,9 +47,10 @@ def get(spark_session,
 
 def write(df,
           dataset_name,
-          prefix=None,
           *,
-          schema=None):
+          prefix=None,
+          schema=None,
+          dataframe_source=None):
     """Write a dataframe to storage. It will adjust to whatever
     storage the environment has set. Currently storage is supported in
     file or dataiku (HDFS).
@@ -54,18 +58,21 @@ def write(df,
     Args:
         df (DataFrame): spark data frame to write.
         dataset_name (str): The data set to load.
-        prefix (str): Prefix path or dataiku project_key for loading
-        the data set.
 
     Kwargs:
+        prefix (str): Prefix path or dataiku project_key for loading
+        the data set.
         schema (Schema): Birgitta schema to apply on write.
+        dataframe_source (DataframeSourceBase): Option to override
+        the data frame source defined in the context.
 
     Returns:
        None.
     """
     if schema:
         df = schema.enforce(df)
-    dataframe_source = contextsource.get()
+    if not dataframe_source:
+        dataframe_source = contextsource.get()
     return dataframe_source.write(df, dataset_name, prefix)
 
 

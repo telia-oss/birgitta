@@ -8,8 +8,7 @@ from pyspark.sql.utils import AnalysisException
 
 @pytest.fixture()
 def dataframe_source(tmpdir):
-    source_params = {'dataset_dir': tmpdir.strpath}
-    return LocalSource(source_params)
+    return LocalSource(dataset_dir=tmpdir.strpath)
 
 
 def test_run(dataframe_source):

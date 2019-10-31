@@ -10,14 +10,14 @@ __all__ = ['LocalSource']
 
 
 class LocalSource(DataframeSourceBase):
-    def __init__(self, params={}):
-        super().__init__(params)
-        if 'dataset_dir' in params:
-            self.dataset_dir = params['dataset_dir']
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if 'dataset_dir' in kwargs:
+            self.dataset_dir = kwargs['dataset_dir']
         else:
             self.dataset_dir = None
 
-    def load(self, spark_session, dataset_name, prefix):
+    def load(self, spark_session, dataset_name, prefix, **kwargs):
         dataset_dir = prefix  # Interpret prefix as dataset_dir
         if not dataset_dir:
             dataset_dir = self.dataset_dir
@@ -36,7 +36,7 @@ class LocalSource(DataframeSourceBase):
             else:
                 raise e
 
-    def write(self, df, dataset_name, dataset_dir=None):
+    def write(self, df, dataset_name, dataset_dir=None, **kwargs):
         if not dataset_dir:
             dataset_dir = self.dataset_dir
         dest_path = "%s/%s/" % (dataset_dir, dataset_name)

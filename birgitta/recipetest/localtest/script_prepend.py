@@ -13,8 +13,7 @@ from birgitta import notebook
 from birgitta.recipetest.coverage.report import log_transform
 import pyspark
 
-source_params = {'dataset_dir': '__DATASET_DIR__'}
-contextsource.set(LocalSource(source_params))
+contextsource.set(LocalSource(dataset_dir='__DATASET_DIR__'))
 context.set("BIRGITTA_TEST_COVERAGE", globals()['BIRGITTA_TEST_COVERAGE'])
 context.set("BIRGITTA_DBG_COUNTS", globals()['BIRGITTA_DBG_COUNTS'])
 context.set("BIRGITTA_SPARK_SESSION_TYPE",

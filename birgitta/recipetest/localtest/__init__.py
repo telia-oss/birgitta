@@ -103,7 +103,7 @@ def run_case(tmpdir,
     timing.time("run_case_fn start: %s" % (fixture_name))
     # in_fixtures duration: approx 2 secs
     tdir = tmpdir.strpath
-    dataframe_source = LocalSource({'dataset_dir': tdir})
+    dataframe_source = LocalSource(dataset_dir=tdir)
     in_fixture_fns = fixturing.obtain_fixture_fns(in_datasets,
                                                   fixture_name)
     # out_fixtures duration: approx 0.05 secs

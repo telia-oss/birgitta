@@ -7,17 +7,17 @@ __all__ = ['DataframeSourceBase']
 
 
 class DataframeSourceBase(metaclass=ABCMeta):
-    def __init__(self, params={}):
+    def __init__(self, **kwargs):
         """Abstract data fram source class.
 
         Args:
-            params (dict): optional dict of params needed for a data source,
-                e.g. workspace prefix.
+            **kwargs (keyword args): optional keyword args for subclasses.
+            e.g. dataset_dir for LocalSource.
         """
-        self.params = params
+        self.keyword_args = kwargs
 
     @abstractmethod
-    def load(self, spark_session, dataset_name, prefix):
+    def load(self, spark_session, dataset_name, prefix, **kwargs):
         """Method for getting a data frame.
 
         Args:
@@ -32,7 +32,7 @@ class DataframeSourceBase(metaclass=ABCMeta):
         return NotImplemented
 
     @abstractmethod
-    def write(self, df, dataset_name, prefix):
+    def write(self, df, dataset_name, prefix, **kwargs):
         """Write a data frame to a data source.
 
         Args:

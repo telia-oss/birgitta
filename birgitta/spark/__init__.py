@@ -60,7 +60,7 @@ def is_local():
 
 def conf_spark():
     """Configure local spark to be fast for recipe tests."""
-    pyspark.SparkConf().getAll()
+    # pyspark.SparkConf().getAll()
     # Speed up config for small test data sets
     conf = pyspark.SparkConf().setAll([
         # No parallelism needed in small data
