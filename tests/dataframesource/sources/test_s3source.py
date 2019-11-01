@@ -49,22 +49,19 @@ def expected(spark_session, fixtures_data):
     return expected
 
 
-@pytest.fixture()
-def s3_source_load_ret(spark_session, fixtures_data, expected):
-    return spark_session.createDataFrame(fixtures_data, fixtures_schema)
-
-
-def test_equal(spark_session, fixtures, expected, s3_source_load_ret):
+def test_equal(spark_session, fixtures, expected):
     s3_source = S3Source(format='parquet')
-    s3_source.write = MagicMock(return_value=None)
-    s3_source.load = MagicMock(return_value=s3_source_load_ret)
     dataset_name = "fixtures"
     s3_dir = "s3://birgittatestbucket/sourcetests"
-    dataframe.write(fixtures,
+    fixtures_mock = MagicMock()
+    fixtures_mock.write.format().mode().save.return_value = None
+    dataframe.write(fixtures_mock,
                     dataset_name,
                     prefix=s3_dir,
                     dataframe_source=s3_source)
-    out_df = dataframe.get(spark_session,
+    spark_session_mock = MagicMock()
+    spark_session_mock.read.format().load.return_value = fixtures
+    out_df = dataframe.get(spark_session_mock,
                            dataset_name,
                            prefix=s3_dir,
                            dataframe_source=s3_source)
