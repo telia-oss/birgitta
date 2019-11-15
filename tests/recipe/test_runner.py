@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from birgitta import context
 from birgitta.dataframesource.sources.localsource import LocalSource
@@ -32,3 +34,15 @@ def test_syntax_error(dataframe_source):
                    "recipes/compute_filtered_contracts.py",
                    dataframe_source,
                    replacements)
+
+
+def test_run_and_exit(dataframe_source):
+    context.reset()
+    with pytest.raises(SystemExit) as e_info:
+        recipe = "recipes/compute_noop.py"
+        runner.run_and_exit(tribune,
+                            recipe,
+                            dataframe_source)
+    pattern = f"Exit after running recipe: .*/tribune/{recipe}"
+    expected_re = re.compile(pattern)
+    assert expected_re.match(str(e_info.value))

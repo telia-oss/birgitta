@@ -53,9 +53,42 @@ def test_equal(fixtures, expected):
 
 def test_error_on_short(fixtures, expected):
     expected_short = expected.limit(5)
-    assert dfdiff.diff(fixtures, expected_short) == """Error: Row count diff
+    expected_output = """Error: Row count diff
         Expected: 10
-        Actual:   5"""
+        Actual:   5
+
+Rows are different (max 20 rows shown)
+        Only in expected:
+          letter  number
+0      f       6
+1      g       7
+2      h       8
+3      i       9
+4      j      10
+        Only in actual result:
+        Empty DataFrame
+Columns: [letter, number]
+Index: []
+        Expected:
+          letter  number
+0      a       1
+1      b       2
+2      c       3
+3      d       4
+4      e       5
+5      f       6
+6      g       7
+7      h       8
+8      i       9
+9      j      10
+        Actual:
+          letter  number
+0      a       1
+1      b       2
+2      c       3
+3      d       4
+4      e       5"""
+    assert dfdiff.diff(fixtures, expected_short) == expected_output
 
 
 def test_error_on_extra_col(fixtures, expected):
@@ -76,7 +109,7 @@ def test_error_on_col_name_diff(fixtures, expected):
 
 def test_error_on_val_diff(fixtures, expected):
     expected_val_diff = expected.withColumn('number', F.lit(3))
-    assert dfdiff.diff(fixtures, expected_val_diff) == """Error: Rows are different
+    assert dfdiff.diff(fixtures, expected_val_diff) == """Error: Rows are different (max 20 rows shown)
         Only in expected:
           letter  number
 0      a       1
@@ -128,7 +161,7 @@ def test_error_on_val_diff(fixtures, expected):
 def test_error_on_single_val_diff(fixtures, expected):
     num_when = F.when(F.col('number') == 3, 3333).otherwise(F.col('number'))
     expected_single_val_diff = expected.withColumn('number', num_when)
-    assert dfdiff.diff(fixtures, expected_single_val_diff) == """Error: Rows are different
+    assert dfdiff.diff(fixtures, expected_single_val_diff) == """Error: Rows are different (max 20 rows shown)
         Only in expected:
           letter  number
 0      c       3

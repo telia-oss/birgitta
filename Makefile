@@ -4,7 +4,7 @@ TAG = latest
 SRC_DIR = $(shell pwd)
 DIST_DIR = $(SRC_DIR)/dist
 BIRGITTA_TESTS = $(SRC_DIR)/tests
-PROJECT_TESTS = $(SRC_DIR)/examples/organizations/newsltd
+ORGANIZATION_TESTS = $(SRC_DIR)/examples/organizations/newsltd
 
 package: clean json_fixtures
 	python setup.py sdist bdist_wheel
@@ -48,7 +48,7 @@ test:
 	# been in progress in another thread when fork() was called.
 	OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES \
 	pytest \
-		$(PROJECT_TESTS) $(BIRGITTA_TESTS) \
+		$(ORGANIZATION_TESTS) $(BIRGITTA_TESTS) \
 		--cov=birgitta \
 		--cov=examples/organizations \
 		--cov-report html \
