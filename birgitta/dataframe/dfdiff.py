@@ -49,21 +49,28 @@ def diff(expected, actual):
     expected_count = expected.count()
     actual_count = actual.count()
     # Same number of rows
+    ret = False
     if expected_count != actual_count:
-        return """Error: Row count diff
+        ret = """Error: Row count diff
         Expected: %s
         Actual:   %s""" % (expected_count, actual_count)
     # Are the records the same
     expected_pdf = panda_sorted(expected)
     actual_pdf = panda_sorted(actual)
     if not expected_pdf.equals(actual_pdf):
+        max_rows = 20
         diff_df = expected.subtract(actual)
         reverse_diff_df = actual.subtract(expected)
-        differing_rows_str = panda_sorted(diff_df).to_string()
-        reverse_differing_rows_str = panda_sorted(reverse_diff_df).to_string()
-        expected_rows_str = expected_pdf.to_string()
-        actual_rows_str = actual_pdf.to_string()
-        return """Error: Rows are different
+        differing_rows_str = panda_sorted(diff_df).head(max_rows).to_string()
+        reverse_differing_rows_str = panda_sorted(
+            reverse_diff_df).head(max_rows).to_string()
+        expected_rows_str = expected_pdf.head(max_rows).to_string()
+        actual_rows_str = actual_pdf.head(max_rows).to_string()
+        if not ret:
+            ret = "Error: "
+        else:
+            ret += "\n\n"
+        ret += """Rows are different (max %d rows shown)
         Only in expected:
         %s
         Only in actual result:
@@ -71,11 +78,12 @@ def diff(expected, actual):
         Expected:
         %s
         Actual:
-        %s""" % (differing_rows_str,
+        %s""" % (max_rows,
+                 differing_rows_str,
                  reverse_differing_rows_str,
                  expected_rows_str,
                  actual_rows_str)
-    return False
+    return ret
 
 
 def panda_assert_df_equals(expected_df, actual_df):
