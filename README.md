@@ -285,6 +285,10 @@ You can then adjust your input fixtures and rerun.
 
 More information can be found on the [Birgitta documentation site.](https://birgitta.readthedocs.io/en/latest/introduction.html)
 
+## Git-based DataOps development process
+
+See [the tutorial on Git-based Dataiku DataOps development process](./docs/dev_process/dataiku.md) for how to use Birgitta with  Dataiku to implement a git based DataOps development process.
+
 ## Development
 
 ### Contributing
