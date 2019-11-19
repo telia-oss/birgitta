@@ -12,7 +12,7 @@ providing automated tests for pyspark notebooks/recipes.
 
 Birgitta allows doing solid ETL and ML, while still liberally
 allowing imperfect notebook code, enabling a
-`DataOps <https://www.dataopsmanifesto.org>`_ way of
+`DataOps <https://www.dataopsmanifesto.org>` way of
 working which is both solid and agile, not killing
 Data Scientist flexibility by excessive coding standards in notebooks.
 
