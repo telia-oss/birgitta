@@ -1,4 +1,6 @@
-# A Git-based Dataiku DataOps development process for pyspark
+# A Git-based Dataiku DataOps development process for pyspark recipes
+
+This tutorial presents a development process for pyspark recipes on Dataiku, based around git and the [Birgitta](https://github.com/telia-oss/birgitta) ETL test and schema framework.
 
 ### First, some terminology...
 
