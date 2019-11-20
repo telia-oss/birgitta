@@ -1,6 +1,6 @@
 # A Git-based Dataiku DataOps development process for pyspark
 
-###First, some terminology...
+### First, some terminology...
 
 **Recipe**, in this context, is a piece of pyspark code that is execute as a Dataiku Recipe.
 
