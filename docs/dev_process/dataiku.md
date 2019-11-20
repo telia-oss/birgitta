@@ -130,6 +130,12 @@ Whatever version of modules existing in the `recipe-customer-kpi` branch will be
 
 ### Adding schemas
 
+We will now explain how to add versioned schemas to output and input data sets.
+
+#### Install Birgitta
+
+Install [the Birgitta pip package](https://pypi.org/project/birgitta/) in your [Dataiku Code environment](https://doc.dataiku.com/dss/latest/code-envs/index.html).
+
 #### Adding output schema
 
 Adding schemas is a tool for robustness in your recipes, and is a precondition for the [birgitta unit tests](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/tests/recipes/test_contracts.py). The first step is to define the output schema, which is passed to [dataframe.write()](https://github.com/telia-oss/birgitta-example-etl/blob/bd9ff3a45ae22207a08ff9e4811c2d63a408805d/newsltd_etl/projects/chronicle/recipes/compute_contracts.py#L33):
