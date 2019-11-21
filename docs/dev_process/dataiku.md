@@ -13,6 +13,7 @@ The purpose is to achieve **stable and solid** production recipes while still en
 The **ETL repository** is your organization's git repository for storing recipes, schemas, fixtures, tests and shared functions for pyspark ETL. It's role will be gradually explained below.
 
 # Recipe development
+![git-based-dataiku-recipe-development-process](./images/git-based-dataiku-recipe-development-process.png)
 
 Here, we explain how recipes can be developed from experimental notebook code into more solid production recipes.
 
