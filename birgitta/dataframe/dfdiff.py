@@ -19,8 +19,8 @@ def cols_diff(expected, actual):
         expected_cols = ",".join(expected.columns)
         actual_cols = ",".join(actual.columns)
         return """Error: Cols diff
-        Expected: %s
-        Actual:   %s""" % (expected_cols, actual_cols)
+Expected: %s
+Actual:   %s""" % (expected_cols, actual_cols)
     return None
 
 
@@ -31,8 +31,8 @@ def dtypes_diff(expected, actual):
         expected_dtypes = repr(expected.dtypes)
         actual_dtypes = repr(actual.dtypes)
         return """Error: Column type diff
-        Expected: %s
-        Actual:   %s""" % (expected_dtypes, actual_dtypes)
+Expected: %s
+Actual:   %s""" % (expected_dtypes, actual_dtypes)
     return None
 
 
@@ -52,8 +52,8 @@ def diff(expected, actual):
     ret = False
     if expected_count != actual_count:
         ret = """Error: Row count diff
-        Expected: %s
-        Actual:   %s""" % (expected_count, actual_count)
+Expected: %s
+Actual:   %s""" % (expected_count, actual_count)
     # Are the records the same
     expected_pdf = panda_sorted(expected)
     actual_pdf = panda_sorted(actual)
@@ -71,18 +71,18 @@ def diff(expected, actual):
         else:
             ret += "\n\n"
         ret += """Rows are different (max %d rows shown)
-        Only in expected:
-        %s
-        Only in actual result:
-        %s
-        Expected:
-        %s
-        Actual:
-        %s""" % (max_rows,
-                 differing_rows_str,
-                 reverse_differing_rows_str,
-                 expected_rows_str,
-                 actual_rows_str)
+Only in expected:
+%s
+Only in actual result:
+%s
+Expected:
+%s
+Actual:
+%s""" % (max_rows,
+         differing_rows_str,
+         reverse_differing_rows_str,
+         expected_rows_str,
+         actual_rows_str)
     return ret
 
 
