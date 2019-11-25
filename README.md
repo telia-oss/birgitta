@@ -19,6 +19,11 @@ The overall goal of Birgitta is to solidify Data Engineering and ETL, especially
 >
 > *From The Prophecies and Revelations of Saint Birgitta (Bridget) of Sweden, Chapter 20*
 
+## Solid yet flexible development
+
+An example of how to use Birgitta in a development process in [Dataiku](https://www.dataiku.com], is found [in this tutorial](./docs/dev_process/dataiku.md). Here is a visualization of that process:
+
+![git-based-dataiku-recipe-development-process](./docs/dev_process/images/git-based-dataiku-recipe-development-process.png)
 
 ## Installation
 
