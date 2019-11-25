@@ -9,7 +9,7 @@ Birgitta is a Python ETL test and schema framework, providing automated tests fo
 
 Birgitta allows doing solid ETL and ML, while still liberally allowing imperfect notebook code, enabling a [DataOps](https://www.dataopsmanifesto.org) way of working, which is both solid and agile, not killing Data Scientist flexibility by excessive coding standards in notebooks.
 
-In addition to running recipetests on your local dev machine or on a CI/CD server, there is support for running recipetests as [Dataiku](https://www.dataiku.com] DSS Scenarios.
+In addition to running recipetests on your local dev machine or on a CI/CD server, there is support for running recipetests as [Dataiku](https://www.dataiku.com) DSS Scenarios.
 
 ## Philosophy
 
@@ -21,7 +21,7 @@ The overall goal of Birgitta is to solidify Data Engineering and ETL, especially
 
 ## Solid yet flexible development
 
-An example of how to use Birgitta in a development process in [Dataiku](https://www.dataiku.com], is found [in this tutorial](./docs/dev_process/dataiku.md). Here is a visualization of that process:
+An example of how to use Birgitta in a development process in [Dataiku](https://www.dataiku.com), is found [in this tutorial](./docs/dev_process/dataiku.md). Here is a visualization of that process:
 
 ![git-based-dataiku-recipe-development-process](./docs/dev_process/images/git-based-dataiku-recipe-development-process.png)
 
