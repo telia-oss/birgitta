@@ -230,7 +230,13 @@ When a stable and tested version of the recipe has been added to git, the recipe
 The old code can be left below for convenience, if you want to go back and hack around on it later. Some people might prefer to just delete the old code.
 
 ```python
-from birgitta.dataframesource.sources.dataikusource import DataikuSource from birgitta.recipe import runner from examples.organizations.newsltd.projects import tribune runner.run_and_exit(tribune, "recipes/compute_filtered_contracts.py", DataikuSource())  ### The recipe below stays the same, but code is never run ###  # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE from birgitta import spark as bspark from birgitta.dataframe import dataframe from pyspark.sql import functions as F from examples.organizations.newsltd.projects.tribune.datasets.filtered_contracts import dataset as ds_filtered_contracts # noqa 501 from examples.organizations.newsltd.projects.tribune.datasets.contracts import dataset as ds_contracts # noqa 501  # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE #  Get or create sparkcontext and set up sqlcontext spark_session = bspark.session() # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE contracts = dataframe.get(spark_session,                      ds_contracts.name,                      cast_binary_to_str=True)  ...  
+from birgitta.dataframesource.sources.dataikusource import DataikuSource
+from birgitta.recipe import runner from examples.organizations.newsltd.projects import tribune
+
+runner.run_and_exit(tribune, "recipes/compute_filtered_contracts.py", DataikuSource())
+
+### The recipe below stays the same, but code is never run ###
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE from birgitta import spark as bspark from birgitta.dataframe import dataframe from pyspark.sql import functions as F from examples.organizations.newsltd.projects.tribune.datasets.filtered_contracts import dataset as ds_filtered_contracts # noqa 501 from examples.organizations.newsltd.projects.tribune.datasets.contracts import dataset as ds_contracts # noqa 501  # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE #  Get or create sparkcontext and set up sqlcontext spark_session = bspark.session() # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE contracts = dataframe.get(spark_session,                      ds_contracts.name,                      cast_binary_to_str=True)  ...  
 ```
 
 Note that the old code is exactly the same as the code in git, including the usage of schemas `birgitta.dataframe.read()` and `write()`.
