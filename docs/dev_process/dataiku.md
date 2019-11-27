@@ -57,11 +57,9 @@ In Dataiku, we are in the `TRIBUNE` project. Go to project → libraries:
 ![add-from-git](./images/open-library-editor.png)
 
 
-
 There, do `Import from Git`:
 
 ![add-from-git](./images/add-from-git.png)
-
 
 
 We will use these settings:
@@ -202,7 +200,9 @@ schemaspark.from_spark_df(to_output_df)
 For this to work we first need to add that [schema](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/datasets/contracts/schema.py) to github. The file must look like this:
 
 ```python
-`from birgitta.schema import spark as schemaspark # to_output_df is the schema we want to get the schema from: schemaspark.from_spark_df(to_output_df)
+from birgitta.schema import spark as schemaspark
+# to_output_df is the schema we want to get the schema from:
+schemaspark.from_spark_df(to_output_df)
 # Output:
 # fields = [
 #     ['customer_id', 'bigint'],
@@ -214,7 +214,7 @@ For this to work we first need to add that [schema](https://github.com/telia-oss
 #     ['priceplan_code', 'string'],
 #     ['current_flag', 'bigint'],
 #     ['client_status_code', 'bigint']
-# ]`
+# ]
 ```
 
 #### Adding input schemas
