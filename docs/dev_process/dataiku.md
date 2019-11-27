@@ -236,7 +236,14 @@ from birgitta.recipe import runner from examples.organizations.newsltd.projects 
 runner.run_and_exit(tribune, "recipes/compute_filtered_contracts.py", DataikuSource())
 
 ### The recipe below stays the same, but code is never run ###
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE from birgitta import spark as bspark from birgitta.dataframe import dataframe from pyspark.sql import functions as F from examples.organizations.newsltd.projects.tribune.datasets.filtered_contracts import dataset as ds_filtered_contracts # noqa 501 from examples.organizations.newsltd.projects.tribune.datasets.contracts import dataset as ds_contracts # noqa 501  # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE #  Get or create sparkcontext and set up sqlcontext spark_session = bspark.session() # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE contracts = dataframe.get(spark_session,                      ds_contracts.name,                      cast_binary_to_str=True)  ...  
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE from birgitta import spark as bspark from birgitta.dataframe import dataframe from pyspark.sql import functions as F from examples.organizations.newsltd.projects.tribune.datasets.filtered_contracts import dataset as ds_filtered_contracts # noqa 501 from examples.organizations.newsltd.projects.tribune.datasets.contracts import dataset as ds_contracts # noqa 501
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE #  Get or create sparkcontext and set up sqlcontext
+spark_session = bspark.session()
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+contracts = dataframe.get(spark_session,
+                          ds_contracts.name,
+                      cast_binary_to_str=True)
+...  
 ```
 
 Note that the old code is exactly the same as the code in git, including the usage of schemas `birgitta.dataframe.read()` and `write()`.
@@ -266,13 +273,26 @@ Some advanced testing features to mention are multiple fixtures, JSON fixtures a
 If needed, you can cover more logic in our recipes with [multiple sets of fixtures](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/tribune/tests/fixtures/contracts.py). Here is an example:
 
 ```python
-`def fx_default(spark):     return fixtures.df(spark, schema)   def fx_brand_code_44(spark):     row_confs = [         {"brand_code": {"example": {"static": 44}}}     ]     return fixtures.df(spark, schema, row_confs)`
+def fx_default(spark):
+    return fixtures.df(spark, schema)
+    
+    
+def fx_brand_code_44(spark):
+   row_confs = [
+       {"brand_code": {"example": {"static": 44}}}
+   ]
+   return fixtures.df(spark, schema, row_confs)
 ```
 
 You need to have the same fixtures available for all input and output fixtures for a recipe test. You then explicitly invoke both variations of the [test](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/tribune/tests/recipes/test_filtered_contracts.py):
 
 ```python
-`def test_default(run_case):     run_case("default")   def test_brand_code_44(run_case):     run_case("brand_code_44")`
+def test_default(run_case):
+    run_case("default")
+
+
+def test_brand_code_44(run_case):
+    run_case("brand_code_44")
 ```
 
 ### JSON fixtures
@@ -280,7 +300,8 @@ You need to have the same fixtures available for all input and output fixtures f
 For debugging and visualization, birgitta supports generating JSON examples of your fixtures. In [birgitta-example-etl](https://github.com/telia-oss/birgitta-example-etl) this is invoked by running `make json_fixtures` which in turn calls a [python script](https://github.com/telia-oss/birgitta-example-etl/blob/master/make_json_fixtures.py) which contains the following:
 
 ```python
-`import newsltd_etl from birgitta.schema.fixtures import json as fx_json   fx_json.make(newsltd_etl)`
+import newsltd_etl from birgitta.schema.fixtures import json as fx_json
+fx_json.make(newsltd_etl)
 ```
 
 Here is an [example JSON output of the brand_code_44 fixture for contracts](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/tribune/tests/fixtures/generated_json/contracts/fx_brand_code_44.json).
