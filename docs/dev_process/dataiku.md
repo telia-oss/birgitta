@@ -144,13 +144,31 @@ Adding schemas is a tool for robustness in your recipes, and is a precondition f
 Initially, in dataiku recipes a data set is written with `dkuspark.write_with_schema()`. This must be change to use `birgitta.dataframe.write()`:
 
 ```python
-`#### Old dataiku version: # dku_contracts = dataiku.Dataset("contracts") # dkuspark.write_with_schema(dku_contacts, to_output_df) # #### Now changed to: from newsltd_etl.projects.chronicle.datasets.contracts import dataset as ds_contracts dataframe.write(to_output_df, "contracts", schema=ds_contracts.schema)`
+#### Old dataiku version:
+# dku_contracts = dataiku.Dataset("contracts")
+# dkuspark.write_with_schema(dku_contacts, to_output_df)
+# #### Now changed to:
+from newsltd_etl.projects.chronicle.datasets.contracts import dataset as ds_contracts
+dataframe.write(to_output_df, "contracts", schema=ds_contracts.schema)
 ```
 
 For this to work we first need to add that [schema](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/datasets/contracts/schema.py) to github. The file must look like this:
 
 ```python
-`from birgitta.schema.schema import Schema from newsltd_etl.shared.schema.catalog.tribune_chronicle import catalog  fields = [     ['customer_id', 'bigint'],     ['phone', 'string'],     ['chronicle_account_id', 'bigint'],     ['group_account_id', 'bigint'],     ['start_date', 'date'],     ['end_date', 'date'],     ['priceplan_code', 'string'],     ['current_flag', 'bigint'],     ['client_status_code', 'bigint'] ]  schema = Schema(fields, catalog)`
+from birgitta.schema.schema import Schema 
+from newsltd_etl.shared.schema.catalog.tribune_chronicle import catalog  
+fields = [
+     ['customer_id', 'bigint'],
+     ['phone', 'string'],
+     ['chronicle_account_id', 'bigint'],
+     ['group_account_id', 'bigint'],
+     ['start_date', 'date'], 
+     ['end_date', 'date'],
+     ['priceplan_code', 'string'],
+     ['current_flag', 'bigint'],
+     ['client_status_code', 'bigint']
+]
+schema = Schema(fields, catalog)
 ```
 
 The [catalog](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/shared/schema/catalog/chronicle.py) defines all the fields we have in our domain. [New entries with example values](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/shared/schema/catalog/chronicle.py) must be added for all fields we have in the schema. This serves both as documentation and for creating test fixtures. Also, it serves as a data field catalog, helping us to organize our field names.
@@ -184,7 +202,19 @@ schemaspark.from_spark_df(to_output_df)
 For this to work we first need to add that [schema](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/datasets/contracts/schema.py) to github. The file must look like this:
 
 ```python
-`from birgitta.schema import spark as schemaspark # to_output_df is the schema we want to get the schema from: schemaspark.from_spark_df(to_output_df) # Output: # fields = [ #     ['customer_id', 'bigint'], #     ['phone', 'string'], #     ['chronicle_account_id', 'bigint'], #     ['group_account_id', 'bigint'], #     ['start_date', 'date'], #     ['end_date', 'date'], #     ['priceplan_code', 'string'], #     ['current_flag', 'bigint'], #     ['client_status_code', 'bigint'] # ]`
+`from birgitta.schema import spark as schemaspark # to_output_df is the schema we want to get the schema from: schemaspark.from_spark_df(to_output_df)
+# Output:
+# fields = [
+#     ['customer_id', 'bigint'],
+#     ['phone', 'string'],
+#     ['chronicle_account_id', 'bigint'],
+#     ['group_account_id', 'bigint'],
+#     ['start_date', 'date'],
+#     ['end_date', 'date'],
+#     ['priceplan_code', 'string'],
+#     ['current_flag', 'bigint'],
+#     ['client_status_code', 'bigint']
+# ]`
 ```
 
 #### Adding input schemas
@@ -194,7 +224,12 @@ To add input schemas, we follow the same methodology as for adding the output sc
 You must replace all your `dkuspark.get_dataframe()` calls with birgitta's `dataframe.read()` commands, in order for your units test to be able to run locally:
 
 ```python
-`#### Old dataiku version: # contract_data_ds = dataiku.Dataset("contract_data") # contract_data_df = dkuspark.get_dataframe(sqlContext, contract_data_ds) #### Now changed to: from newsltd_etl.projects.chronicle.datasets.contract_data import dataset as ds_contract_data contract_data_df = dataframe.get(spark_session, ds_contract_data.name) `
+#### Old dataiku version:
+# contract_data_ds = dataiku.Dataset("contract_data")
+# contract_data_df = dkuspark.get_dataframe(sqlContext, contract_data_ds)
+#### Now changed to:
+from newsltd_etl.projects.chronicle.datasets.contract_data import dataset as ds_contract_data
+contract_data_df = dataframe.get(spark_session, ds_contract_data.name)
 ```
 
 ## Writing tests and committing recipe
@@ -241,7 +276,7 @@ runner.run_and_exit(tribune, "recipes/compute_filtered_contracts.py", DataikuSou
 spark_session = bspark.session()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 contracts = dataframe.get(spark_session,
-                          ds_contracts.name,
+                      ds_contracts.name,
                       cast_binary_to_str=True)
 ...  
 ```
@@ -275,8 +310,8 @@ If needed, you can cover more logic in our recipes with [multiple sets of fixtur
 ```python
 def fx_default(spark):
     return fixtures.df(spark, schema)
-    
-    
+
+
 def fx_brand_code_44(spark):
    row_confs = [
        {"brand_code": {"example": {"static": 44}}}
