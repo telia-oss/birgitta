@@ -175,6 +175,8 @@ When the [schema](https://github.com/telia-oss/birgitta-example-etl/blob/master/
 
 This can be tested in a notebook or in Dataiku recipe mode without adding input schemas.
 
+#### Simple way of deriving schema
+
 The actual schema itself can be derived by using the utility function [birgitta.schema.spark.from_spark_df()](https://github.com/telia-oss/birgitta/blob/4c7ede5098254a4dbed9e2ef5672ba3e1a89f9f4/birgitta/schema/spark.py#L70) in a notebook:
 
 ```python
@@ -195,27 +197,6 @@ schemaspark.from_spark_df(to_output_df)
 # ]
 ```
 
-#### Simple way of deriving schema
-
-For this to work we first need to add that [schema](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/datasets/contracts/schema.py) to github. The file must look like this:
-
-```python
-from birgitta.schema import spark as schemaspark
-# to_output_df is the schema we want to get the schema from:
-schemaspark.from_spark_df(to_output_df)
-# Output:
-# fields = [
-#     ['customer_id', 'bigint'],
-#     ['phone', 'string'],
-#     ['chronicle_account_id', 'bigint'],
-#     ['group_account_id', 'bigint'],
-#     ['start_date', 'date'],
-#     ['end_date', 'date'],
-#     ['priceplan_code', 'string'],
-#     ['current_flag', 'bigint'],
-#     ['client_status_code', 'bigint']
-# ]
-```
 
 #### Adding input schemas
 
