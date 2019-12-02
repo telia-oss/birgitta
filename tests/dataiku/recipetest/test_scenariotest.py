@@ -17,6 +17,7 @@ sys.modules['dataiku.spark'] = spark_mock
 dku_mock = mock.MagicMock()
 dku_mock.spark = spark_mock
 sys.modules['dataiku'] = dku_mock
+sys.modules['dataiku.scenario'] = mock.MagicMock()
 sys.modules['dataikuapi'] = mock.MagicMock()
 sys.modules['dataikuapi.dss'] = mock.MagicMock()
 sys.modules['dataikuapi.dss.recipe'] = mock.MagicMock()
@@ -101,3 +102,9 @@ def test_no_assert(spark_session,
                              src_recipe_key,
                              testbench_project_key,
                              test_params)
+
+
+def test_simplescenario():
+    from birgitta import recipetest  # noqa F401
+    with pytest.raises(KeyError):
+        from birgitta.dataiku.recipetest.examples import simplescenario  # noqa F401

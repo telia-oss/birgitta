@@ -1,5 +1,5 @@
 from birgitta import spark as bspark
-from birgitta.recipetest import recipetest
+from birgitta.dataiku.recipetest import scenariotest
 from birgitta.schema.spark import to_spark
 from dataiku.scenario import Scenario
 
@@ -40,9 +40,9 @@ test_params = {
     ]
 }
 
-recipetest.test_recipe(spark_session,
-                       scenario,
-                       src_project_key,
-                       src_recipe_key,
-                       testbench_project_key,
-                       test_params)
+scenariotest.test_recipe(spark_session,
+                         scenario,
+                         src_project_key,
+                         src_recipe_key,
+                         testbench_project_key,
+                         test_params)
