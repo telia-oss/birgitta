@@ -10,8 +10,8 @@ def priceplan_code():
     return 'C574'
 
 
-def customer_id(index=0):
-    return 11220 + index
+def customer_id():
+    return 11220
 
 
 def accountid():

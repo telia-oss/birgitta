@@ -1,14 +1,9 @@
-from birgitta.schema import fixtures
+from birgitta.schema.fixtures import Fixture, RowConf
+from birgitta.schema.fixtures.variants import RowConfsVariant
 
-from ...datasets.contracts import schema
-
-
-def fx_default(spark):
-    return fixtures.df(spark, schema)
+from ...datasets.contracts import dataset as contracts
 
 
-def fx_brand_code_44(spark):
-    row_confs = [
-        {"brand_code": {"example": {"static": 44}}}
-    ]
-    return fixtures.df(spark, schema, row_confs)
+fixture = Fixture(contracts)
+fixture.add_variant('brand_code_44',
+                    RowConfsVariant([RowConf().set_field('brand_code', 44)]))

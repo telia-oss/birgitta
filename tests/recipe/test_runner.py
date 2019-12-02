@@ -4,7 +4,7 @@ import pytest
 from birgitta import context
 from birgitta.dataframesource.sources.localsource import LocalSource
 from birgitta.recipe import runner
-from examples.organizations.newsltd.projects import tribune
+from newsltd_etl.projects import tribune
 from pyspark.sql.utils import AnalysisException
 
 

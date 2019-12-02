@@ -3,47 +3,54 @@ from birgitta.fields.catalog import Catalog
 from ...schema.fixtures.values import chronicle as cv
 
 
-FIELD_CONFS = {
-    'groupid': {
-        'description': 'Chronicle group id', # noqa 501
-        'example': {'fn': cv.groupid}
-    },
-    'accountid': {
-        'description': 'Chronicle account id', # noqa 501
-        'example': {'fn': cv.accountid}
-    },
-    'chronicle_account_id': {
-        'description': 'Chronicle account id', # noqa 501
-        'example': {'fn': cv.accountid}
-    },
-    'cellphone': {
-        'description': 'Chronicle phone number', # noqa 501
-        'example': {'fn': cv.cellphone}
-    },
-    'enddate_yyyymmdd': {
-        'description': 'Chronicle contract end date.', # noqa 501
-        'example': {'fn': cv.enddate_yyyymmdd}
-    },
-    'startdate_yyyymmdd': {
-        'description': 'Chronicle contract start date.', # noqa 501
-        'example': {'fn': cv.startdate_yyyymmdd}
-    },
-    'priceplan_code': {
-        'description': 'Chronicle code of the priceplan', # noqa 501
-        'example': {'fn': cv.priceplan_code}
-    },
-    'priceplan_price': {
-        'description': 'Chronicle price of the priceplan', # noqa 501
-        'example': {'fn': cv.priceplan_price}
-    },
-    'status': {
-        'description': 'Chronicle client status. 1 is active. 2 is inactive. 4 is discontinued.', # noqa 501
-        'example': {'static': 0}
-    },
-    'customerid': {
-        'description': 'Chronicle client id', # noqa 501
-        'example': {'fn': cv.customer_id}
-    }
-}
-
-catalog = Catalog(FIELD_CONFS)
+catalog = Catalog()
+catalog.add_field(
+    'groupid',
+    example=cv.groupid(),
+    description='Chronicle group id'
+)
+catalog.add_field(
+    'accountid',
+    example=cv.accountid(),
+    description='Chronicle account id'
+)
+catalog.add_field(
+    'chronicle_account_id',
+    example=cv.accountid(),
+    description='Chronicle account id'
+)
+catalog.add_field(
+    'cellphone',
+    example=cv.cellphone(),
+    description='Chronicle phone number'
+)
+catalog.add_field(
+    'enddate_yyyymmdd',
+    example=cv.enddate_yyyymmdd(),
+    description='Chronicle contract end date.'
+)
+catalog.add_field(
+    'startdate_yyyymmdd',
+    example=cv.startdate_yyyymmdd(),
+    description='Chronicle contract start date.'
+)
+catalog.add_field(
+    'priceplan_code',
+    example=cv.priceplan_code(),
+    description='Chronicle code of the priceplan'
+)
+catalog.add_field(
+    'priceplan_price',
+    example=cv.priceplan_price(),
+    description='Chronicle price of the priceplan'
+)
+catalog.add_field(
+    'status',
+    example=0,
+    description='Chronicle client status. 1 is active. 2 is inactive. 4 is discontinued.' # noqa E501
+)
+catalog.add_field(
+    'customerid',
+    example=cv.customer_id(),
+    description='Chronicle client id'
+)

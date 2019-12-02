@@ -1,7 +1,6 @@
-from birgitta.schema import fixtures
-from ...datasets.contract_data import schema # noqa 501
+from birgitta.schema.fixtures import Fixture
+
+from ...datasets.contract_data import dataset as contract_data
 
 
-def fx_default(spark):
-    row_confs = [{}]
-    return fixtures.df(spark, schema, row_confs)
+fixture = Fixture(contract_data)

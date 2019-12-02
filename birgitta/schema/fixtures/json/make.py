@@ -23,10 +23,10 @@ def make(org_mod):
     object:Imported python module
 """
     dst_dir = os.path.dirname(org_mod.__file__)
-    internal_make(org_mod, dst_dir)
+    make_with_dst_dir(org_mod, dst_dir)
 
 
-def internal_make(org_mod, dst_dir):
+def make_with_dst_dir(org_mod, dst_dir):
     """Make json fixtures from the fixture definitions
     found in the projects under an organization module.
 
@@ -48,7 +48,7 @@ def internal_make(org_mod, dst_dir):
 
 def mod_from_name(name):
     """Import module from module name, e.g.
-    examples.organizations.newsltd get module."""
+    the newsltd_etl module."""
     return importlib.import_module(name)
 
 

@@ -1,35 +1,30 @@
-def phone(index=0):
-    return u"G479999999%d" % (index)
+def phone():
+    return "G4799999990"
 
 
-def customer_id(index=0):
-    return 11220 + index
+def customer_id():
+    return 11220
 
 
-def group_account_id(index=0):
-    return 3335412 + index
+def group_account_id():
+    return 3335412
 
 
-def sec_no(index=0):
-    return 2233444 + index
+def sec_no():
+    return 2233444
 
 
 def shop_code():
-    return u'ONLINE'
+    return "ONLINE"
 
 
 def priceplan_name():
-    return u'Regular paper edition'
+    return "Regular paper edition"
 
 
-def sales_agent(index=0):
-    agents = [
-        'A',
-        'B',
-        'C'
-    ]
-    return agents[index]
+def sales_agent():
+    return 'A'
 
 
 def prod_code():
-    return u'PAPERVERSION'
+    return 'PAPERVERSION'

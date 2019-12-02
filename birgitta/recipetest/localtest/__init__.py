@@ -9,24 +9,24 @@ from birgitta.dataframesource.sources.localsource import LocalSource
 from birgitta.recipe import runner
 from birgitta.recipetest import localtest
 from birgitta.recipetest.coverage import report
-from birgitta.recipetest.localtest import fixturing, assertion, script_prepend  # noqa 401
-from birgitta.recipetest.coverage.report import cov_report, dbg_counts, cov_results  # noqa 401
+from birgitta.recipetest.localtest import fixturing, assertion, script_prepend  # noqa F401
+from birgitta.recipetest.coverage.report import cov_report, dbg_counts, cov_results  # noqa F401
 from birgitta.recipetest.coverage.transform import prepare
 
 __all__ = ['recipe_path', 'run_case_partial']
 
 
-@pytest.fixture("function")  # noqa 401
+@pytest.fixture("function")  # noqa F401
 def run_case_partial(tmpdir,
-                     cov_report,  # noqa 811
-                     cov_results,  # noqa 811
+                     cov_report,  # noqa F811
+                     cov_results,  # noqa F811
                      spark_session,
                      request):
     """Create a run_case partial to enable the running fixture
     based cases, referring only to the fixture name. Example:
 
     ```
-    def run_case(run_case_partial):   # noqa 811
+    def run_case(run_case_partial):   # noqa F811
     return run_case_partial([[ds_contracts, fx_contracts]],
                             [[ds_filtered_contracts,
                               fx_filtered_contracts]],
@@ -68,7 +68,7 @@ def recipe_path(file_path, prefix="compute_"):
     """
     dir_path = os.path.dirname(os.path.abspath(file_path))
     filename = os.path.basename(file_path).replace("test_", prefix)
-    return F"{dir_path}/../../recipes/{filename}" # noqa 501
+    return F"{dir_path}/../../recipes/{filename}" # noqa F501
 
 
 def transposed_partial(*argv):
@@ -80,11 +80,11 @@ def transposed_partial(*argv):
 
 def run_case(tmpdir,
              cov_report_file,
-             cov_results,  # noqa 811
+             cov_results,  # noqa F811
              test_case,
              spark_session,
-             in_datasets,
-             out_datasets,
+             in_fixtures,
+             out_fixtures,
              recipe_path,
              fixture_name):
     """Run a test case.
@@ -101,24 +101,24 @@ def run_case(tmpdir,
         None
     """
     timing.time("run_case_fn start: %s" % (fixture_name))
-    # in_fixtures duration: approx 2 secs
     tdir = tmpdir.strpath
     dataframe_source = LocalSource(dataset_dir=tdir)
-    in_fixture_fns = fixturing.obtain_fixture_fns(in_datasets,
-                                                  fixture_name)
-    # out_fixtures duration: approx 0.05 secs
-    out_fixture_fns = fixturing.obtain_fixture_fns(out_datasets,
-                                                   fixture_name)
-    # process_recipe duration: approx 7.2 secs
+    fixture_name = test_case[5:]  # Lose 'test_' prefix
+    fixturing.write_fixtures(in_fixtures,
+                             fixture_name,
+                             spark_session,
+                             dataframe_source)
+    expected_dfs = fixturing.dataframes(out_fixtures,
+                                        fixture_name,
+                                        spark_session)
     localtest.process_recipe(recipe_path,
                              tdir,
                              dataframe_source,
                              cov_report_file,
                              test_case,
-                             in_fixture_fns,
                              spark_session)
     timing.time("runcase_fn run_script done: %s" % (fixture_name))
-    assertion.assert_outputs(out_fixture_fns,
+    assertion.assert_outputs(expected_dfs,
                              dataframe_source,
                              spark_session)
     report.collect(cov_report_file, test_case, cov_results)
@@ -131,7 +131,6 @@ def process_recipe(path,
                    dataframe_source,
                    cov_report_file,
                    test_case,
-                   in_fixture_fns,
                    spark_session):
     """Prepare the recipe and trigger the recipe execution.
     """
@@ -147,10 +146,6 @@ def process_recipe(path,
         "BIRGITTA_TEST_COVERAGE": cov_dict,
         "BIRGITTA_DBG_COUNTS": dbg_counts()
     }
-    fixturing.write_fixtures(globals_dict,
-                             in_fixture_fns,
-                             dataframe_source,
-                             spark_session)
     full_code = script_prepend.code(tdir) + code_w_reporting
     dump_test_recipe(test_case, tdir, full_code)
     timing.time("execute_recipe before exec")

@@ -1,3 +1,4 @@
+from birgitta.schema.fixtures import ExampleVal
 from birgitta.schema.fixtures import values as v
 from birgitta.schema.schema import Schema
 
@@ -15,7 +16,7 @@ FIELDS = [
     ["product_name", "string"],
     ["brand_name", "string"],
     ["start_date", "date"],
-    ["end_date", "date", {"example": {"fn": v.today}}],
+    ["end_date", "date", ExampleVal(v.today())],
     ["shop_code", "string"],
     ["product_category", "string"]
 ]

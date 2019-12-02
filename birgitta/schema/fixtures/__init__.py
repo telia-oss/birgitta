@@ -4,10 +4,18 @@ import datetime
 
 import pandas as pd
 
-__all__ = ['df', 'df_w_rows']
+from .example_val import ExampleVal
+from .fixture import Fixture
+from .row_conf import RowConf
+
+__all__ = ['df',
+           'df_w_rows',
+           'ExampleVal',
+           'Fixture',
+           'RowConf']
 
 
-def df(spark, schema, row_confs=[{}]):
+def df(spark, schema, row_confs):
     """Returns a dataframe based on a schema and row conf.
 
     Args:
@@ -43,22 +51,23 @@ def rows(schema, row_confs):
     return entries
 
 
-def row(schema, fixture_confs):
-    """Get a row based on the schema and fixture_confs.
+def row(schema, row_conf):
+    """Get a row based on the schema and row_confs.
 
     Returns a list of values.
     """
     ret = []
     schema_types = schema.types()
     for field in schema.fields():
-        # The catalog example value conf can be overriden
+        # The catalog example value conf can be overriden:
         # in the fixture
         # or
         # in the schema.
-        override_conf = fixture_confs.get(field)
-        if not override_conf:
-            override_conf = schema.example_val_override(field)
-        val = schema.catalog.example_val(field, override_conf)
+        val = row_conf.get_field(field)  # fixture
+        if not val:
+            val = schema.example_val_override(field)  # schema
+        if not val:
+            val = schema.catalog.example_val(field)  # catalog
         field_type = schema_types[field]
         # Convert to datetime if field is timestamp and val is date,
         # to avoid explicit type-only overrides of example val in schema confs

@@ -5,12 +5,12 @@ from pandas.util.testing import assert_frame_equal
 __all__ = ['assert_outputs']
 
 
-def assert_outputs(expected_fixtures, dataframe_source, spark_session):
-    """Assert that the expected fixtures are equal to the
+def assert_outputs(expected_dfs, dataframe_source, spark_session):
+    """Assert that the expected fixture dataframes are equal to the
     produced outputs. Improves exception presentation."""
-    for df_key in expected_fixtures.keys():
+    for df_key in expected_dfs.keys():
         result_df = dataframe_source.load(spark_session, df_key, None)
-        expected_df = expected_fixtures[df_key](spark_session)
+        expected_df = expected_dfs[df_key]
         result_panda = to_pandas(result_df)
         expected_panda = to_pandas(expected_df)
         # Ugly hack to print schema

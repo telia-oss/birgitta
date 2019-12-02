@@ -1,10 +1,12 @@
 """The Schema class. Used to handle fixtures and managed spark
 schemas.
 """
+from birgitta.schema.fixtures import ExampleVal
 from birgitta.schema.spark import enforce_schema, to_spark, to_escaped_spark  # noqa 401
 
 NAME_POS = 0
 TYPE_POS = 1
+OTHER_POS = 2
 
 __all__ = ['Schema']
 
@@ -21,6 +23,7 @@ class Schema:
         """
         self.arr_schema = arr_schema
         self.catalog = catalog
+        self.field_confs = self.get_field_confs()
 
     def to_spark(self):
         return to_spark(self.arr_schema)
@@ -38,7 +41,7 @@ class Schema:
         return enforce_schema(df, self)
 
     def example_val_override(self, field):
-        return self.field_params()[field]
+        return self.field_confs.get("example")
 
     def field_params(self):
         ret = {}
@@ -48,6 +51,30 @@ class Schema:
                 ret[field] = row[2]
             else:
                 ret[field] = {}
+        return ret
+
+    def get_field_confs(self):
+        """Convert list DSL into a dict of values:
+        {
+            "name": {
+                "type": "str"
+            },
+            "customer_id": {
+                "type": "str",
+                "example": 124 # if present
+            }
+            ...
+        }
+        """
+        ret = {}
+        for row in self.arr_schema:
+            field = row[NAME_POS]
+            conf = {"type": row[TYPE_POS]}
+            if len(row) > OTHER_POS:
+                other_arg = row[OTHER_POS]
+                if type(other_arg) == ExampleVal:
+                    conf["example"] = other_arg.val
+            ret[field] = conf
         return ret
 
     def dict(self):
