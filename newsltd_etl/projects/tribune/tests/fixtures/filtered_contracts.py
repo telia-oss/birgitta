@@ -1,4 +1,4 @@
-from birgitta.schema.fixtures import ExampleVal, Fixture, RowConf
+from birgitta.schema.fixtures import Fixture, RowConf
 from birgitta.schema.fixtures import values as v
 from birgitta.schema.fixtures.variants import RowConfsVariant
 

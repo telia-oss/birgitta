@@ -1,4 +1,4 @@
-COV_MIN = 87 # Gradually increase this as we add more tests
+COV_MIN = 85 # Gradually increase this as we add more tests
 TAG = latest
 
 SRC_DIR = $(shell pwd)
