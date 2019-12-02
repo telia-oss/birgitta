@@ -7,8 +7,8 @@
 from birgitta import spark as bspark
 from birgitta.dataframe import dataframe
 from pyspark.sql import functions as F
-from examples.organizations.newsltd.projects.tribune.datasets.filtered_contracts import dataset as ds_filtered_contracts # noqa 501
-from examples.organizations.newsltd.projects.tribune.datasets.contracts import dataset as ds_contracts # noqa 501
+from newsltd_etl.projects.tribune.datasets.filtered_contracts import dataset as ds_filtered_contracts # noqa 501
+from newsltd_etl.projects.tribune.datasets.contracts import dataset as ds_contracts # noqa 501
 
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 #  Get or create sparkcontext and set up sqlcontext

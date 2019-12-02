@@ -1,12 +1,16 @@
-from birgitta.schema import fixtures
-from ...datasets.contracts import schema # noqa 501
+from birgitta.schema.fixtures import Fixture, RowConf
+from birgitta.schema.fixtures.variants import RowConfsVariant
+
+from ...datasets.contracts import dataset as contracts
 from .....shared.schema.fixtures.values import chronicle as cv
 
 
-def fx_default(spark):
-    row_confs = [{
-        'customerid': {"example": {"fn": cv.customer_id}},
-        'group_account_id': {"example": {"fn": cv.groupid}},
-        'priceplan_code': {"example": {"fn": cv.priceplan_code}}
-    }]
-    return fixtures.df(spark, schema, row_confs)
+fixture = Fixture(contracts)
+default_row_confs = [
+    RowConf().set_field('customerid', cv.customer_id())
+    .set_field('group_account_id', cv.groupid())
+    .set_field('priceplan_code', cv.priceplan_code())
+]
+fixture.set_default_variant(RowConfsVariant(default_row_confs))
+# No rows expected on brand_code=44
+fixture.add_variant('brand_code_44', RowConfsVariant([]))

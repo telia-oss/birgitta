@@ -9,8 +9,8 @@ from birgitta import spark as bspark
 from birgitta.dataframe import dataframe
 from birgitta.recipe import params as recipe_params
 from birgitta.recipe.debug import dataframe as dfdbg
-from examples.organizations.newsltd.projects.tribune.datasets.daily_contract_states import dataset as ds_daily_contract_states # noqa 501
-from examples.organizations.newsltd.projects.tribune.datasets.filtered_contracts import dataset as ds_filtered_contracts # noqa 501
+from newsltd_etl.projects.tribune.datasets.daily_contract_states import dataset as ds_daily_contract_states # noqa 501
+from newsltd_etl.projects.tribune.datasets.filtered_contracts import dataset as ds_filtered_contracts # noqa 501
 from pyspark.sql import functions as f
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 analysis_start_date = datetime.date(2016, 1, 1)

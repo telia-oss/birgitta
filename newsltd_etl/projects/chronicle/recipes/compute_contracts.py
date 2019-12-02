@@ -4,8 +4,8 @@ import warnings
 
 from birgitta import spark as bspark
 from birgitta.dataframe import dataframe
-from examples.organizations.newsltd.projects.chronicle.datasets.contract_data import dataset as ds_contract_data  # noqa 501
-from examples.organizations.newsltd.projects.chronicle.datasets.contracts import dataset as ds_contracts  # noqa 501
+from newsltd_etl.projects.chronicle.datasets.contract_data import dataset as ds_contract_data  # noqa 501
+from newsltd_etl.projects.chronicle.datasets.contracts import dataset as ds_contracts  # noqa 501
 from pyspark.sql import functions as F
 warnings.filterwarnings('ignore')  # supress python warnings
 

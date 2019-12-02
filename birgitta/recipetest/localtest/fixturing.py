@@ -3,36 +3,40 @@
 from birgitta import timing
 
 
-__all__ = ['obtain_fixture_fns', 'write_fixtures']
+__all__ = ['dataframes', 'write_fixtures']
 
 
-def obtain_fixture_fns(datasets, fixture_name):
-    """Obtain fixture functions
+def dataframes(fixtures, variant_name, spark_session):
+    """Makes dataframes from fixtures.
+
+    Args:
+        fixtures (dict): Dict of fixtures
+        variant_name (str): Name of fixture variant
+        spark_session (SparkSesssion): Spark session used to create fixtures
+        dataframe_source (DataframeSource): The source to write to, e.g. S3
 
     Returns:
-        Dict of fixture name -> fixture fn.
+       A dict of `dataset name => dataframe` pairs
     """
-    fixture_fns = {}
-    for ds in datasets:
-        ds_module = ds[0]
-        fixture_module = ds[1]
-        fixture_fn = getattr(fixture_module, "fx_" + fixture_name)
-        fixture_fns[ds_module.dataset.name] = fixture_fn
-    return fixture_fns
+    # FUTURE: Try writing directly to parquet using pyarrow instead. Could be faster. # noqa 501
+    ret = {}
+    for fixture in fixtures:
+        ret[fixture.dataset.name] = fixture.df(variant_name,
+                                               spark_session)
+    return ret
 
 
-def write_fixtures(globals_dict, fixture_fns, dataframe_source, spark_session):
+def write_fixtures(fixtures, variant_name, spark_session, dataframe_source):
     """Write fixtures to storage.
 
     Args:
-        globals_dict (dict): The set of variables which will be
-        available to the pyspark recipe as globals. It is needed
-        in order to store the memory based fixtures in globals.
-        fixture_fns
+        fixtures (dict): Dict of fixtures
+        variant_name (str): Name of fixture variant
+        spark_session (SparkSession): Spark session used to create fixtures
+        dataframe_source (DataframeSource): The source to write to, e.g. FS
     """
     timing.time("write_fixtures start")
-    # FUTURE: Try writing directly to parquet using pyarrow instead. Could be faster. # noqa 501
-    for dataframe_key in fixture_fns.keys():
-        df = fixture_fns[dataframe_key](spark_session)
-        dataframe_source.write(df, dataframe_key)
+    dfs = dataframes(fixtures, variant_name, spark_session)
+    for ds_name in dfs.keys():
+        dataframe_source.write(dfs[ds_name], ds_name)
     timing.time("write_fixtures end")

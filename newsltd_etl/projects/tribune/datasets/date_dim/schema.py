@@ -1,3 +1,5 @@
+# from birgitta.schema.fields import ExampleVal
+# from birgitta.schema.fixtures.values import dtvals
 from birgitta.schema.schema import Schema
 
 from .....shared.schema.catalog.tribune import catalog

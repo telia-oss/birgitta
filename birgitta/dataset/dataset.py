@@ -1,10 +1,10 @@
-"""The DataSet class. Defines data set name and schema.
+"""The Dataset class. Defines data set name and schema.
 """
 
-__all__ = ['DataSet']
+__all__ = ['Dataset']
 
 
-class DataSet:
+class Dataset:
     def __init__(self, name, schema):
         """Constructs a dataset object which should be treated
         as immutable.

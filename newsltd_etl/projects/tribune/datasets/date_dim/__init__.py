@@ -1,5 +1,5 @@
-from birgitta.dataset.dataset import DataSet
+from birgitta.dataset.dataset import Dataset
 
 from .schema import schema
 
-dataset = DataSet("date_dim", schema)
+dataset = Dataset("date_dim", schema)

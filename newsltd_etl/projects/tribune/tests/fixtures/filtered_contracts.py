@@ -1,13 +1,13 @@
-from birgitta.schema import fixtures
+from birgitta.schema.fixtures import ExampleVal, Fixture, RowConf
 from birgitta.schema.fixtures import values as v
-from ...datasets.filtered_contracts import schema # noqa 501
+from birgitta.schema.fixtures.variants import RowConfsVariant
+
+from ...datasets.filtered_contracts import dataset as filtered_contracts
 
 
-def fx_default(spark):
-    row_confs = [{'end_date': {"example": {"fn": v.today}}}]
-    return fixtures.df(spark, schema, row_confs)
-
-
-def fx_brand_code_44(spark):
-    row_confs = []
-    return fixtures.df(spark, schema, row_confs)
+fixture = Fixture(filtered_contracts)
+default_row_confs = [
+    RowConf().set_field('end_date', v.today())
+]
+fixture.set_default_variant(RowConfsVariant(default_row_confs))
+fixture.add_variant('brand_code_44', RowConfsVariant([]))

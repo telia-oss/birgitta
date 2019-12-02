@@ -4,14 +4,14 @@ TAG = latest
 SRC_DIR = $(shell pwd)
 DIST_DIR = $(SRC_DIR)/dist
 BIRGITTA_TESTS = $(SRC_DIR)/tests
-ORGANIZATION_TESTS = $(SRC_DIR)/examples/organizations/newsltd
+ORGANIZATION_TESTS = $(SRC_DIR)/newsltd_etl
 
 package: clean json_fixtures
 	python setup.py sdist bdist_wheel
 
 clean_json_fixtures:
-	rm -rf "$(SRC_DIR)/examples/organizations/newsltd/projects/chronicle/tests/fixtures/generated_json/*"
-	rm -rf "$(SRC_DIR)/examples/organizations/newsltd/projects/tribune/tests/fixtures/generated_json/*"
+	rm -rf "$(SRC_DIR)/newsltd_etl/projects/chronicle/tests/fixtures/generated_json/*"
+	rm -rf "$(SRC_DIR)/newsltd_etl/projects/tribune/tests/fixtures/generated_json/*"
 
 clean:
 	cd $(SRC_DIR)
@@ -19,6 +19,7 @@ clean:
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '*~' -exec rm -f {} +
+	rm -rf build/
 	rm -rf dist/
 	rm -rf *.egg-info
 	rm -rf htmlcov/
