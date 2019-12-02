@@ -25,9 +25,9 @@ A recipe often starts with a notebook experiment to create some new data set fro
 
 To make a recipe ready for production with Birgitta, we must:
 
-1. Factor our common functionality to git modules, e.g. like [the periods.group_by_day() function](https://github.com/telia-oss/birgitta-example-etl/blob/bd9ff3a45ae22207a08ff9e4811c2d63a408805d/newsltd_etl/libs/periods/__init__.py#L10).
+1. Factor our common functionality to git modules, e.g. like [the periods.group_by_day() function](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/libs/periods/__init__.py#L10).
 2. Add [schemas ](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/datasets/contract_data/schema.py)to git.
-3. Verify the [schema](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/datasets/contract_data/schema.py) of input and output data sets, using [dataframe.write() and read()](https://github.com/telia-oss/birgitta/blob/4ee6dd01d3d15c924edc7ae8393ff3bd484db1e9/examples/organizations/newsltd/projects/chronicle/recipes/compute_contracts.py#L33).
+3. Verify the [schema](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/datasets/contract_data/schema.py) of input and output data sets, using [dataframe.write() and read()](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/recipes/compute_contracts.py#L33).
 4. Submit [the recipe to git](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/recipes/compute_contracts.py).
 5. Add [recipe unit tests with fixtures](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/tests/recipes/test_contracts.py), so the it's correctness is tested.
 6. [Override the dataiku recipe code](https://tsnwiki.atlassian.net/wiki/plugins/viewsource/viewpagesrc.action?pageId=1569260230#DataikuPysparkRecipeDevelopmentProcess-GitOverride) by invoking the git version of the recipe and exit.
@@ -42,7 +42,7 @@ The first step is to create a branch. If your recipe is called `compute_customer
 
 ### Factor out common functionality to modules in git
 
-To improve code quality and readability it is often useful to factor out common functionality to functions or classes, e.g. like [the periods.group_by_day() function](https://github.com/telia-oss/birgitta-example-etl/blob/bd9ff3a45ae22207a08ff9e4811c2d63a408805d/newsltd_etl/libs/periods/__init__.py#L10). The modules should be added under `/libs/` in your repo organization folder, in our case https://github.com/telia-oss/birgitta-example-etl/tree/master/newsltd_etl/libs. All code should be covered by tests, added under `libs/tests`, like https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/libs/tests/periods/test_group_by_day.py. Typically, you will factor out code to improve readability or share functionality between recipes. [Here is an example](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/libs/periods/__init__.py). 
+To improve code quality and readability it is often useful to factor out common functionality to functions or classes, e.g. like [the periods.group_by_day() function](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/libs/periods/__init__.py#L10). The modules should be added under `/libs/` in your repo organization folder, in our case https://github.com/telia-oss/birgitta-example-etl/tree/master/newsltd_etl/libs. All code should be covered by tests, added under `libs/tests`, like https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/libs/tests/periods/test_group_by_day.py. Typically, you will factor out code to improve readability or share functionality between recipes. [Here is an example](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/libs/periods/__init__.py). 
 
 When the libs code is ready to run, add a commit. This does not have to be a final commit, as Dataiku can use code from unmerged (unfinished) branches.
 
@@ -137,7 +137,7 @@ Install [the Birgitta pip package](https://pypi.org/project/birgitta/) in your [
 
 #### Adding output schema
 
-Adding schemas is a tool for robustness in your recipes, and is a precondition for the [birgitta unit tests](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/tests/recipes/test_contracts.py). The first step is to define the output schema, which is passed to [dataframe.write()](https://github.com/telia-oss/birgitta-example-etl/blob/bd9ff3a45ae22207a08ff9e4811c2d63a408805d/newsltd_etl/projects/chronicle/recipes/compute_contracts.py#L33):
+Adding schemas is a tool for robustness in your recipes, and is a precondition for the [birgitta unit tests](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/tests/recipes/test_contracts.py). The first step is to define the output schema, which is passed to [dataframe.write()](https://github.com/telia-oss/birgitta-example-etl/blob/master/newsltd_etl/projects/chronicle/recipes/compute_contracts.py#L33):
 
 Initially, in dataiku recipes a data set is written with `dkuspark.write_with_schema()`. This must be change to use `birgitta.dataframe.write()`:
 
@@ -247,13 +247,19 @@ The old code can be left below for convenience, if you want to go back and hack 
 
 ```python
 from birgitta.dataframesource.sources.dataikusource import DataikuSource
-from birgitta.recipe import runner from examples.organizations.newsltd.projects import tribune
+from birgitta.recipe import runner from newsltd_etl.projects import tribune
 
 runner.run_and_exit(tribune, "recipes/compute_filtered_contracts.py", DataikuSource())
 
 ### The recipe below stays the same, but code is never run ###
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE from birgitta import spark as bspark from birgitta.dataframe import dataframe from pyspark.sql import functions as F from examples.organizations.newsltd.projects.tribune.datasets.filtered_contracts import dataset as ds_filtered_contracts # noqa 501 from examples.organizations.newsltd.projects.tribune.datasets.contracts import dataset as ds_contracts # noqa 501
-# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE #  Get or create sparkcontext and set up sqlcontext
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+from birgitta import spark as bspark
+from birgitta.dataframe import dataframe
+from pyspark.sql import functions as F
+from newsltd_etl.projects.tribune.datasets.filtered_contracts import dataset as ds_filtered_contracts # noqa 501
+from newsltd_etl.projects.tribune.datasets.contracts import dataset as ds_contracts # noqa 501
+# -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
+#  Get or create sparkcontext and set up sqlcontext
 spark_session = bspark.session()
 # -------------------------------------------------------------------------------- NOTEBOOK-CELL: CODE
 contracts = dataframe.get(spark_session,
