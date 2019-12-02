@@ -35,23 +35,23 @@ $ pip install birgitta
 
 To test pyspark code and notebooks we want input fixtures (test data) and expected output fixtures and schema definitions for input and output datasets. With these, we automatically test pyspark code and notebooks in [pytests](https://docs.pytest.org/en/latest/).
 
-Here is an [example test](examples/organizations/newsltd/projects/tribune/tests/recipes/test_daily_contract_states.py). For clarity, the schemas, fixtures and tests are split up into separate files and folders.
+Here is an [example test](newsltd_etl/projects/tribune/tests/recipes/test_daily_contract_states.py). For clarity, the schemas, fixtures and tests are split up into separate files and folders.
 
 These are:
 
-* `recipe` a pyspark file, whose content is collection of lines of code in a notebook, containing only python cells. [Example](examples/organizations/newsltd/projects/tribune/recipes/compute_daily_contract_states.py).
-* `dataset` a dataset has name and schema. [example](examples/organizations/newsltd/projects/tribune/datasets/daily_contract_states/__init__.py).
-* `schema` a definition of a dataset, [example](examples/organizations/newsltd/projects/tribune/datasets/daily_contract_states/schema.py).
-* `catalog` a list of fields (columns/features) with example fixture values. [Example](examples/organizations/newsltd/shared/schema/catalog/tribune.py).
-* `fixtures` example data used to test recipes, either as input data or expected output data. Here is an [example fixture](examples/organizations/newsltd/projects/tribune/tests/fixtures/generated_json/daily_contract_states/fx_default.json), which has been generated from the [fixture definition](examples/organizations/newsltd/projects/tribune/tests/fixtures/daily_contract_states.py).
-* `recipetest` a pytest which tests that a recipe produces the expected output. [Example](examples/organizations/newsltd/projects/tribune/tests/recipes/test_daily_contract_states.py).
-* `project` a folder containing recipes, tests and datasets for a specific project or purpose. [Example](examples/organizations/newsltd/projects/tribune/).
-* `organization` a folder holding a set of projects. [Example](examples/organizations/newsltd/).
+* `recipe` a pyspark file, whose content is collection of lines of code in a notebook, containing only python cells. [Example](newsltd_etl/projects/tribune/recipes/compute_daily_contract_states.py).
+* `dataset` a dataset has name and schema. [example](newsltd_etl/projects/tribune/datasets/daily_contract_states/__init__.py).
+* `schema` a definition of a dataset, [example](newsltd_etl/projects/tribune/datasets/daily_contract_states/schema.py).
+* `catalog` a list of fields (columns/features) with example fixture values. [Example](newsltd_etl/shared/schema/catalog/tribune.py).
+* `fixtures` example data used to test recipes, either as input data or expected output data. Here is an [example fixture](newsltd_etl/projects/tribune/tests/fixtures/generated_json/daily_contract_states/fx_default.json), which has been generated from the [fixture definition](newsltd_etl/projects/tribune/tests/fixtures/daily_contract_states.py).
+* `recipetest` a pytest which tests that a recipe produces the expected output. [Example](newsltd_etl/projects/tribune/tests/recipes/test_daily_contract_states.py).
+* `project` a folder containing recipes, tests and datasets for a specific project or purpose. [Example](newsltd_etl/projects/tribune/).
+* `organization` a folder holding a set of projects. [Example](newsltd_etl/).
 
 The tests can be run as normal pytests:
 
 ```bash
-pytest examples/organizations/newsltd/projects/tribune/tests/recipes/test_daily_contract_states.py
+pytest newsltd_etl/projects/tribune/tests/recipes/test_daily_contract_states.py
 ```
 
 ## Adding new tests
@@ -60,10 +60,10 @@ To write a new test you need to:
 
 1. Define datasets with schemas for input and output data frames
 2. Add the fields to the field catalog
-3. Copy your pyspark code (the "recipe") to a [python file](examples/organizations/newsltd/projects/tribune/recipes/compute_daily_contract_states.py)
-4. Adjust the python recipe to use [birgitta.dataframe](birgitta/dataframe/dataframe.py) for reading and writing datasets, as shown in this [recipe example](examples/organizations/newsltd/projects/tribune/recipes/compute_daily_contract_states.py)
-5. Define the [input fixtures](examples/organizations/newsltd/projects/tribune/tests/fixtures) and [output fixtures](examples/organizations/newsltd/projects/tribune/tests/fixtures/daily_contract_states.py)
-6. Write the [recipetest](examples/organizations/newsltd/projects/tribune/tests/recipes/test_daily_contract_states.py)
+3. Copy your pyspark code (the "recipe") to a [python file](newsltd_etl/projects/tribune/recipes/compute_daily_contract_states.py)
+4. Adjust the python recipe to use [birgitta.dataframe](birgitta/dataframe/dataframe.py) for reading and writing datasets, as shown in this [recipe example](newsltd_etl/projects/tribune/recipes/compute_daily_contract_states.py)
+5. Define the [input fixtures](newsltd_etl/projects/tribune/tests/fixtures) and [output fixtures](newsltd_etl/projects/tribune/tests/fixtures/daily_contract_states.py)
+6. Write the [recipetest](newsltd_etl/projects/tribune/tests/recipes/test_daily_contract_states.py)
 7. Run the test :)
 
 ## How to easily derive a schema
@@ -98,11 +98,11 @@ fields = [
 ]
 ```
 
-You must then create a schema object, as seen [here](examples/organizations/newsltd/projects/tribune/datasets/daily_contract_states/schema.py). You must also add the missing fields, if any, to the [domain catalog](examples/organizations/newsltd/shared/schema/catalog/tribune.py), to enable fixture creation.
+You must then create a schema object, as seen [here](newsltd_etl/projects/tribune/datasets/daily_contract_states/schema.py). You must also add the missing fields, if any, to the [domain catalog](newsltd_etl/shared/schema/catalog/tribune.py), to enable fixture creation.
 
 ## Generating json fixtures from your python fixture definitions
 
-To generate json fixtures examples for the fixtures defined in the projects under the example `newsltd` organization in the directory `examples/organizations/newsltd`, add a script to your repository root called something like make_json_fixtures.py, with the following content:
+To generate json fixtures examples for the fixtures defined in the projects under the example `newsltd` organization in the directory `newsltd_etl`, add a script to your repository root called something like make_json_fixtures.py, with the following content:
 
 ```python
 import examples.organizations.newsltd
@@ -120,31 +120,33 @@ python make_json_fixtures.py
 
 ## Catalogs
 
-A field [catalog](examples/organizations/newsltd/shared/schema/catalog/tribune.py) defines the fields/columns existing in one or more datasets in a project. The advantage is that example data and field description is defined once, and is reused across data sets. It also provides a clear overview of which field names are currently used in the project, and thus also promotes reuse of names.
+A field [catalog](newsltd_etl/shared/schema/catalog/tribune.py) defines the fields/columns existing in one or more datasets in a project. The advantage is that example data and field description is defined once, and is reused across data sets. It also provides a clear overview of which field names are currently used in the project, and thus also promotes reuse of names.
 
 An entry in a catalog could be:
 
 ```python
-    'priceplan_code': {
-        "example": {"static": "PAPERVERSION"},
-        "description": "Price plan code"
-    },
+catalog.add_field(
+    'product_code',
+    example='PAPERVERSION',
+    description="Product code from the sales system"
+)
 ```
 
 Both `example` and `description` are mandatory.
 
 ### Reusing example values across fields
 
-However, you might want to reuse values across fields. E.g. the price plan code could be later interpreted as a product code in another dataset with a different persepective on the same underlying data. Thus the same example value would be needed:
+However, you might want to reuse values across fields. E.g. the price plan code could be further down in the ETL flow be interpreted as a product code in another dataset with a different persepective on the same underlying data. Thus the same example value would be needed:
 
 ```python
-    'product_code': {
-        "example": {"static": "PAPERVERSION"},
-        "description": "Product code"
-    },
+catalog.add_field(
+    'priceplan_code',
+    example='PAPERVERSION',
+    description="Price plan code from the sales system"
+)
 ```
 
-To allow this reuse of values we define a fixture values file. [Here is an example](examples/organizations/newsltd/shared/schema/fixtures/values/tribune.py).
+To allow this reuse of values we define a fixture values file. [Here is an example](newsltd_etl/shared/schema/fixtures/values/tribune.py).
 
 In tribune.py, we define a `prod_code()` function:
 
@@ -159,15 +161,16 @@ We then use it in the catalog field conf dictionary:
 from ....shared.schema.fixtures.values import tribune as tv
 
 ...
-
-    'priceplan_code': {
-        "example": {"fn": tv.prod_code},
-        "description": "Price plan code"
-    },
-    'product_code': {
-        "example": {"fn": tv.prod_code},
-        "description": "Product code"
-    },
+catalog.add_field(
+    'Product_code',
+    example=tv.prod_code(),
+    description="Product code from the sales system"
+)
+catalog.add_field(
+    'priceplan_code',
+    example=tv.prod_code(),
+    description="Price plan code from the sales system"
+)
 ```
 
 ### Date time values
@@ -189,16 +192,16 @@ It can be used in the field configuration in the catalog:
 from birgitta.schema.fixtures import values as v
 
 ...
-
-    'datestamp': {
-        "example": {"fn": v.inthepast},
-        "description": "Date stamp"
-    },
-    'end_date': {
-        "example": {"fn": v.today_datetime},
-        "description": "Expiration (end) date"
-    },
-
+catalog.add_field(
+    'datestamp',
+    example=v.inthepast(),
+    description="Contract date stamp"
+)
+catalog.add_field(
+    'end_date',
+    example=v.today_datetime(),
+    description="Contract end date"
+)
 ```
 
 ## Transformation coverage testing
@@ -210,10 +213,10 @@ Example:
 Let's run a single test:
 
 ```bash
-pytest -s examples/organizations/newsltd/projects/tribune/tests/recipes/test_daily_contract_states.py
+pytest -s newsltd_etl/projects/tribune/tests/recipes/test_daily_contract_states.py
 ```
 
-The `-s` flag gives us debug printout even if successful. In [this example recipe](examples/organizations/newsltd/projects/tribune/recipes/compute_daily_contract_states.py) line 57 is:
+The `-s` flag gives us debug printout even if successful. In [this example recipe](newsltd_etl/projects/tribune/recipes/compute_daily_contract_states.py) line 57 is:
 
 ```python
 clients = clients.filter(clients.end_date >= analysis_start_date)
@@ -221,7 +224,7 @@ clients = clients.filter(clients.end_date >= analysis_start_date)
 
 If the pytest runs green, this line has been executed. But has it *actuallly processed rows*? It could have been run with an empty data set. If the test expects output, then the test will fail, but there might be bifurcations in the data flow, where the incoming data is split in two client sets and then unioned together at the end. The lines of one of the bifurcations might not have processed any data, and we then cannot now that the logic is correct.
 
-To ensure that each spark transformation actually has processed data, we can add a transformation coverage meta test. Just add the following to your [pytest](examples/organizations/newsltd/projects/tribune/tests/recipes/test_daily_contract_states.py):
+To ensure that each spark transformation actually has processed data, we can add a transformation coverage meta test. Just add the following to your [pytest](newsltd_etl/projects/tribune/tests/recipes/test_daily_contract_states.py):
 
 ```python
 from birgitta.recipetest.coverage.report import transform_coverage  # noqa 401
@@ -258,14 +261,14 @@ This coverage is achieved by injecting coverage checks after each assignment in 
 If your input fixtures do not product output rows, they are probably filtered out prematurely. However, knowing where the input fixtures where discarded often requires a lot of manually `df.count()` calls. To print out row counts from coverage data during execution instead of after finishing a recipe test, set the environment option `BIRGITTA_DBG_COUNTS=1`. Your test will then output the counts:
 
 ```bash
-BIRGITTA_DBG_COUNTS=1 pytest -s examples/organizations/newsltd/projects/tribune/tests/recipes/test_daily_contract_states.py
+BIRGITTA_DBG_COUNTS=1 pytest -s newsltd_etl/projects/tribune/tests/recipes/test_daily_contract_states.py
 ==================================================== test session starts ====================================================
 platform darwin -- Python 3.6.4, pytest-3.8.0, py-1.5.2, pluggy-0.7.1
 rootdir: [..]birgitta, inifile:
 plugins: profiling-1.6.0, mock-1.10.0, cov-2.5.1
 collected 2 items
 
-examples/organizations/newsltd/projects/tribune/tests/recipes/test_daily_contract_states.py 2019-09-23 16:52:50 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+newsltd_etl/projects/tribune/tests/recipes/test_daily_contract_states.py 2019-09-23 16:52:50 WARN  NativeCodeLoader:62 - Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Setting default log level to "WARN".
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
 
@@ -321,3 +324,4 @@ Add support for
 * Write field descriptions to dataiku data sets descriptions and other meta formats
 * Add CLI function for creating a new default project
 * Improve `glob` globals implementation, since it's hacky
+
