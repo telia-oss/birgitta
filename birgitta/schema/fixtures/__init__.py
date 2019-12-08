@@ -12,7 +12,8 @@ __all__ = ['df',
            'df_w_rows',
            'ExampleVal',
            'Fixture',
-           'RowConf']
+           'RowConf',
+           'get_val']
 
 
 def df(spark, schema, row_confs):
@@ -51,6 +52,19 @@ def rows(schema, row_confs):
     return entries
 
 
+def get_val(schema, row_conf, field):
+    # The catalog example value conf can be overriden:
+    # in the fixture
+    # or
+    # in the schema.
+    val = row_conf.get_field(field)  # fixture
+    if val is None:
+        val = schema.example_val_override(field)  # schema
+    if val is None:
+        val = schema.catalog.example_val(field)  # catalog
+    return val
+
+
 def row(schema, row_conf):
     """Get a row based on the schema and row_confs.
 
@@ -59,18 +73,10 @@ def row(schema, row_conf):
     ret = []
     schema_types = schema.types()
     for field in schema.fields():
-        # The catalog example value conf can be overriden:
-        # in the fixture
-        # or
-        # in the schema.
-        val = row_conf.get_field(field)  # fixture
-        if not val:
-            val = schema.example_val_override(field)  # schema
-        if not val:
-            val = schema.catalog.example_val(field)  # catalog
-        field_type = schema_types[field]
+        val = get_val(schema, row_conf, field)
         # Convert to datetime if field is timestamp and val is date,
         # to avoid explicit type-only overrides of example val in schema confs
+        field_type = schema_types[field]
         if (
                 field_type == 'timestamp' and
                 (type(val) == datetime.date)):
