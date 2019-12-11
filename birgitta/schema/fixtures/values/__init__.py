@@ -7,10 +7,10 @@ from birgitta.schema.fixtures.values import dtvals
 def inthepast():
     """We have a hardcoded default timestamp to get consistent
     test execution"""
-    return dtvals.format_dt(pd.Timestamp(2019, 1, 1, 1))
+    return dtvals.format_date(pd.Timestamp(2019, 1, 1, 1))
 
 
-def inthepast_str():
+def inthepaststr():
     return dtvals.dtstr(inthepast())
 
 
@@ -38,7 +38,7 @@ def year_end():
 
 def today_datetime():
     """Today is two months after default timestamp"""
-    return dtvals.format_dt(pd.Timestamp(2019, 3, 1, 1))
+    return dtvals.format_date(pd.Timestamp(2019, 3, 1, 1))
 
 
 def timestamp(day_delta=0, hour_delta=0, hard_val=None):
@@ -50,7 +50,7 @@ def timestamp(day_delta=0, hour_delta=0, hard_val=None):
     else:
         dt = default_timestamp() + pd.Timedelta(days=day_delta,
                                                 hours=hour_delta)
-        dt = dtvals.format_dt(dt)
+        dt = dtvals.format_date(dt)
     return dt
 
 
