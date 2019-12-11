@@ -27,7 +27,7 @@ FIELD_MAP = {
     'day_in_week': 'day_in_week',
     'day_in_month': 'day_in_month',
     'day_in_year': 'day_in_month',
-    'holidayint': 'is_holiday_int',
+    'holidayint': 'isholidayint',
     'is_first_day_in_month': 'is_first_day_in_month',
     'is_last_day_in_month': 'is_last_day_in_month'
 }
