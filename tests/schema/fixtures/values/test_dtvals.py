@@ -14,12 +14,11 @@ def test_daterange():
 
 def test_fieldval():
     dt = v.inthepast()
-    assert dtvals.field_val('period', dt) == 20190101
-    assert dtvals.field_val('month', dt) == 201901
-    assert dtvals.field_val('week', dt) == '01W00'
-    assert not dtvals.field_val('is_last_day_in_week', dt)
-    assert dtvals.field_val('yesterday', dt) == '2018-12-31'
-    assert dtvals.field_val('yesterday_str', dt) == '2018-12-31'
+    assert dtvals.datenum(dt) == 20190101
+    assert dtvals.yearmonthnum(dt) == 201901
+    assert dtvals.yearweekstr(dt) == '01W00'
+    assert not dtvals.is_last_day_in_week(dt)
+    assert dtvals.yesterdaystr(dt) == '2018-12-31'
     last_month_dt = datetime.datetime(2018, 12, 2, 1, 0,
                                       tzinfo=datetime.timezone.utc)
-    assert dtvals.field_val('lastmonth', dt) == last_month_dt
+    assert dtvals.lastmonth(dt) == last_month_dt
