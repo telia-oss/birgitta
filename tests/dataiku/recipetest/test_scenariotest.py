@@ -27,7 +27,7 @@ import dataiku.spark as dkuspark  # noqa E402
 from birgitta.dataframesource import contextsource  # noqa E402
 from birgitta.dataframesource.sources.dataikusource import DataikuSource  # noqa E402
 from birgitta.dataiku.recipetest import scenariotest  # noqa E402
-from birgitta.schema.spark import to_spark  # noqa E402
+from birgitta.schema.spark import simple_to_spark  # noqa E402
 
 
 @pytest.fixture()
@@ -42,8 +42,8 @@ def scenario():
 
 @pytest.fixture()
 def test_params():
-    spark_schema = to_spark([['letter', 'string'],
-                             ['number', 'bigint']])
+    spark_schema = simple_to_spark([['letter', 'string'],
+                                    ['number', 'bigint']])
 
     return {
         'principal_output_dataset': 'exampledatasetoutput',
@@ -106,5 +106,5 @@ def test_no_assert(spark_session,
 
 def test_simplescenario():
     from birgitta import recipetest  # noqa F401
-    with pytest.raises(KeyError):
-        from birgitta.dataiku.recipetest.examples import simplescenario  # noqa F401
+    # with pytest.raises(KeyError):
+    from birgitta.dataiku.recipetest.examples import simplescenario  # noqa F401

@@ -22,7 +22,11 @@ class LocalSource(DataframeSourceBase):
         if not dataset_dir:
             dataset_dir = self.dataset_dir
         try:
-            return spark_session.read.parquet(
+            read = spark_session.read
+            schema = kwargs.get('schema')
+            if schema:
+                read = read.schema(schema.to_spark())
+            return read.parquet(
                 "%s/%s/" % (dataset_dir, dataset_name))
         except AnalysisException as e:
             if "Path does not exist" in str(e):

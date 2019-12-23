@@ -50,8 +50,8 @@ def print_schema_type_diffs(df_key, result_df, expected_df):
     print("============== ", end="")
     print("Data Frame Schema Diff: %s" % (df_key), end="")
     print(" ==============")
-    result_fields = schema_to_set(result_df)
-    expected_fields = schema_to_set(expected_df)
+    result_fields = df_schema_to_set(result_df)
+    expected_fields = df_schema_to_set(expected_df)
     not_in_result = sorted(expected_fields.difference(result_fields))
     if not_in_result:
         print("Not in result:", repr(not_in_result))
@@ -60,7 +60,7 @@ def print_schema_type_diffs(df_key, result_df, expected_df):
         print("Not in expected:", repr(not_in_expected))
 
 
-def schema_to_set(df):
+def df_schema_to_set(df):
     field_strs = set()
     for i, f in enumerate(df.schema.fields):
         field_strs.add("%d:%s:%s" % (i, f.name,
@@ -68,7 +68,7 @@ def schema_to_set(df):
     return field_strs
 
 
-def schema_to_str(df):
+def df_schema_to_str(df):
     field_strs = []
     for i, f in enumerate(df.schema.fields):
         field_strs.append("%d:%s:%s" % (i, f.name,
@@ -80,4 +80,4 @@ def print_schema(name, df):
     print("============== ", end="")
     print("Data Frame Schema: %s" % (name), end="")
     print(" ==============")
-    print(schema_to_str(df))
+    print(df_schema_to_str(df))

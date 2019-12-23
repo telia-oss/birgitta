@@ -11,7 +11,7 @@ def inthepast():
 
 
 def inthepaststr():
-    return dtvals.dtstr(inthepast())
+    return dtvals.datestr(inthepast())
 
 
 def default_timestamp():
@@ -28,11 +28,11 @@ def today():
     return pd.Timestamp(2019, 3, 1, 1).date()
 
 
-def today_str():
-    return dtvals.today_str(today())
+def todaystr():
+    return dtvals.todaystr(today())
 
 
-def year_end():
+def yearend():
     return pd.Timestamp(2019, 12, 31, 1).date()
 
 
@@ -54,8 +54,8 @@ def timestamp(day_delta=0, hour_delta=0, hard_val=None):
     return dt
 
 
-def timestamp_str():
-    return dtvals.dtstr(timestamp())
+def timestampstr():
+    return dtvals.datestr(timestamp())
 
 
 def NaT():

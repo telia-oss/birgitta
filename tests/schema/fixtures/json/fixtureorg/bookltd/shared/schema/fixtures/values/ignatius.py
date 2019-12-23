@@ -28,9 +28,9 @@ def cellphone():
 
 def startdate_yyyymmdd():
     """We have no data before 2019-01-07"""
-    return dtvals.dtstr(v.inthepast())
+    return dtvals.datestr(v.inthepast())
 
 
 def enddate_yyyymmdd():
     """We have no data before 2019-01-07"""
-    return dtvals.dtstr(v.today())
+    return dtvals.datestr(v.today())

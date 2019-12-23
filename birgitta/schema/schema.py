@@ -2,13 +2,14 @@
 schemas.
 """
 from birgitta.schema.fixtures import ExampleVal
-from birgitta.schema.spark import enforce_schema, to_spark, to_escaped_spark  # noqa 401
+from birgitta.schema.nullable import Nullable
+from birgitta.schema.spark import cast_schema, to_spark, to_escaped_spark  # noqa 401
 
 NAME_POS = 0
 TYPE_POS = 1
 OTHER_POS = 2
 
-__all__ = ['Schema']
+__all__ = ['Schema', 'Nullable']
 
 
 class Schema:
@@ -26,7 +27,7 @@ class Schema:
         self.field_confs = self.get_field_confs()
 
     def to_spark(self):
-        return to_spark(self.arr_schema)
+        return to_spark(self.field_confs)
 
     def to_escaped_spark(self):
         return to_escaped_spark(self.arr_schema)
@@ -37,8 +38,8 @@ class Schema:
     def types(self):
         return self.dict()
 
-    def enforce(self, df):
-        return enforce_schema(df, self)
+    def cast(self, df):
+        return cast_schema(df, self)
 
     def example_val_override(self, field):
         return self.field_confs.get("example")
@@ -69,11 +70,20 @@ class Schema:
         ret = {}
         for row in self.arr_schema:
             field = row[NAME_POS]
-            conf = {"type": row[TYPE_POS]}
-            if len(row) > OTHER_POS:
-                other_arg = row[OTHER_POS]
-                if type(other_arg) == ExampleVal:
-                    conf["example"] = other_arg.val
+            conf = {
+                "type": row[TYPE_POS],
+                "nullable": True  # Same default nullable val as spark
+            }
+            num_fields = len(row)
+            if num_fields > OTHER_POS:
+                # Processs other arguments
+                for i in range(OTHER_POS, num_fields):
+                    other_arg = row[i]
+                    arg_type = type(other_arg)
+                    if arg_type == ExampleVal:
+                        conf["example"] = other_arg.val
+                    elif arg_type == Nullable:
+                        conf["nullable"] = other_arg.val
             ret[field] = conf
         return ret
 

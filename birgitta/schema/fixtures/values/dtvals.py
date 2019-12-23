@@ -18,8 +18,8 @@ def default_date_and_today(func):
     def get_default_date_and_today(date=None, today=None):
         if today is None:
             today = v.today()
-            if date is None:
-                date = v.default_date()
+        if date is None:
+            date = v.default_date()
         return func(date, today)
     return get_default_date_and_today
 
@@ -67,11 +67,6 @@ def yearmonthstr(date=None):
 @default_date
 def yearweekstr(date=None):
     return date.strftime("%dW%U")
-
-
-@default_date
-def yearweeknum(date=None):
-    return int(date.strftime("%dW%U"))
 
 
 @default_date
@@ -190,17 +185,17 @@ def lastmonth(date=None):
 
 
 @default_date_and_holiday
-def is_holiday(date=None, hdays=None):
+def isholiday(date=None, hdays=None):
     """Return 1 if a holiday. Default calendar is Norway
     from module holidays."""
-    return 1 if date in hdays else 0
+    return date in hdays
 
 
 @default_date_and_holiday
-def is_holiday_int(date=None, hdays=None):
+def isholidayint(date=None, hdays=None):
     """Return 1 if a holiday. Default calendar is Norway
     from module holidays."""
-    return 1 if is_holiday(date, hdays) else 0
+    return 1 if isholiday(date, hdays) else 0
 
 
 @default_date
@@ -261,9 +256,9 @@ def daterange(start_date=None, end_date=None):
 
 def daterange_len(start_date=None, end_date=None):
     if not start_date:
-        start_date = v.default_date()
+        start_date = v.default_timestamp()
     if not end_date:
-        end_date = v.today()
+        end_date = v.today_datetime()
     return int((end_date - start_date).days)
 
 

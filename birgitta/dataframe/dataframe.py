@@ -7,17 +7,24 @@ storage platforms.
 cast_binary_cols_to_string() is a utility function to deal with
 binary to string conversion of a spark dataframe."""
 
+
 import pandas as pd
 from birgitta.dataframesource import contextsource
+from birgitta.recipetest.localtest import assertion
+from birgitta.schema.spark import short_to_class_type
 from pyspark.sql import functions
+from pyspark.sql.utils import AnalysisException
 
-__all__ = ['get', 'write', 'cast_binary_cols_to_string']
+
+__all__ = ['get', 'write', 'cast_binary_cols_to_string', 'SchemaError']
 
 
 def get(spark_session,
-        dataset_name,
+        dataset_name=None,
         *,
         prefix=None,
+        dataset=None,
+        schema=None,
         cast_binary_to_str=False,
         dataframe_source=None):
     """Obtain a dataframe. It will adjust to whatever
@@ -32,6 +39,8 @@ def get(spark_session,
         prefix (str): Prefix path or dataiku project_key for loading
         the data set.
         cast_binary_to_str (bool): Convert binary to str.
+        schema (Schema): Birgitta schema to verify after read.
+        dataset (Dataset): Birgitta dataset to use for name and schema
         dataframe_source (DataframeSourceBase): Option to override
         the data frame source defined in the context.
     Returns:
@@ -39,10 +48,51 @@ def get(spark_session,
     """
     if not dataframe_source:
         dataframe_source = contextsource.get()
-    ret = dataframe_source.load(spark_session, dataset_name, prefix)
+    if dataset:
+        if schema is None:
+            schema = dataset.schema
+        if dataset_name is None:
+            dataset_name = dataset.name
+    ret = dataframe_source.load(spark_session,
+                                dataset_name,
+                                prefix,
+                                schema=schema)
     if cast_binary_to_str:
         ret = cast_binary_cols_to_string(ret)
     return ret
+
+
+def cast_schema(dataset_name, df, schema):
+    """Ensure df schema corresponds to defined schema"""
+    try:
+        return schema.cast(df)
+    except AnalysisException as err:
+        sdiff = schema_diff(df, schema)
+        raise SchemaError(
+            f"Dataset {dataset_name} with unexpected schema {sdiff}" +
+            "\n\nOriginal exception: " + repr(err))
+
+
+def schema_diff(df, schema):
+    ret = "\n"
+    df_fields = assertion.df_schema_to_set(df)
+    schema_fields = schema_to_set(schema)
+    not_in_df = sorted(schema_fields.difference(df_fields))
+    if not_in_df:
+        ret += "\nNot in df:\n\n" + repr(not_in_df)
+    not_in_schema = sorted(df_fields.difference(schema_fields))
+    if not_in_df:
+        ret += "\n\nNot in schema:\n\n" + repr(not_in_schema)
+    return ret
+
+
+def schema_to_set(schema):
+    field_strs = set()
+    s_dict = schema.dict()
+    for i, name in enumerate(schema.fields()):
+        field_strs.add("%d:%s:%s" % (
+            i, name, short_to_class_type(s_dict[name]).__class__.__name__))
+    return field_strs
 
 
 def write(df,
@@ -70,7 +120,7 @@ def write(df,
        None.
     """
     if schema:
-        df = schema.enforce(df)
+        df = cast_schema(dataset_name, df, schema)
     if not dataframe_source:
         dataframe_source = contextsource.get()
     return dataframe_source.write(df, dataset_name, prefix)
@@ -94,3 +144,8 @@ def cast_binary_cols_to_string(df):
     for col_name in binary_cols:
         df = df.withColumn(col_name, functions.col(col_name).cast('string'))
     return(df)
+
+
+class SchemaError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
