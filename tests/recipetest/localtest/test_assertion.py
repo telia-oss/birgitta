@@ -1,27 +1,12 @@
 import pytest
-from birgitta import spark
 from birgitta.dataframesource.sources.localsource import LocalSource
 from birgitta.recipetest.localtest import assertion
-from pyspark.sql.types import IntegerType
-from pyspark.sql.types import StringType
-from pyspark.sql.types import StructField
-from pyspark.sql.types import StructType
-
-
-@pytest.fixture(scope="session")
-def spark_session():
-    return spark.local_session()
+from tests.datasets import fixtures_schema
 
 
 @pytest.fixture()
 def dataframe_source(tmpdir):
     return LocalSource(dataset_dir=tmpdir.strpath)
-
-
-fixtures_schema = StructType([
-    StructField('letter', StringType()),
-    StructField('number', IntegerType())
-])
 
 
 @pytest.fixture()
@@ -60,11 +45,11 @@ def test_assert_outputs(dataframe_source,
     assertion.assert_outputs(expected_dict, dataframe_source, spark_session)
 
 
-def test_assert_outputs_missing_col(dataframe_source,
-                                    expected_dict,
-                                    fixtures,
-                                    spark_session,
-                                    capsys):
+def test_write_with_schema(dataframe_source,
+                           expected_dict,
+                           fixtures,
+                           spark_session,
+                           capsys):
     dataframe_source.write(fixtures.drop('number'), 'assert_example')
     with pytest.raises(AssertionError):
         assertion.assert_outputs(expected_dict,
@@ -81,29 +66,5 @@ def test_assert_outputs_missing_col(dataframe_source,
 0:letter:StringTy, 1:number:IntegerT
 ============== Data Frame Schema Diff: assert_example ==============
 Not in result: ['1:number:IntegerType']
-""")
-    assert captured.err == ""
-
-
-def test_assert_outputs_missing_rows(dataframe_source,
-                                     expected_dict,
-                                     fixtures,
-                                     spark_session,
-                                     capsys):
-    dataframe_source.write(fixtures.limit(2), 'assert_example')
-    with pytest.raises(AssertionError):
-        assertion.assert_outputs(expected_dict,
-                                 dataframe_source,
-                                 spark_session)
-    captured = capsys.readouterr()
-    assert captured.out == (
-        "============== Data Frame Schema: " +
-        """assert_example_result (left) ==============
-0:letter:StringTy, 1:number:IntegerT
-============== """ +
-        "Data Frame Schema: assert_example_expected (right) " +
-        """==============
-0:letter:StringTy, 1:number:IntegerT
-============== Data Frame Schema Diff: assert_example ==============
 """)
     assert captured.err == ""

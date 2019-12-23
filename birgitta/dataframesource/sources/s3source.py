@@ -18,7 +18,11 @@ class S3Source(DataframeSourceBase):
     def load(self, spark_session, dataset_name, prefix, **kwargs):
         s3_path = prefix  # Assume that prefix is a valid s3_path
         dest_path = f"s3a://{s3_path}/{dataset_name}.{self.format}"
-        return spark_session.read.format(self.format).load(dest_path)
+        schema = kwargs.get('schema')
+        read = spark_session.read
+        if schema:
+            read = read.schema(schema.to_spark())
+        return read.format(self.format).load(dest_path)
 
     def write(self, df, dataset_name, prefix, **kwargs):
         s3_path = prefix  # Assume that prefix is a valid s3_path

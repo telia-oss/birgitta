@@ -6,11 +6,12 @@ from functools import reduce
 from pyspark.sql import types as t
 
 __all__ = [
+    'simple_to_spark',
     'to_spark',
     'to_escaped_spark',
     'from_spark_df',
-    'enforce_schema',
-    'print_df_rows',
+    'cast_schema',
+    'print_df_rows'
 ]
 
 
@@ -40,11 +41,22 @@ NAME_POS = 0
 TYPE_POS = 1
 
 
-def to_spark(simple_schema):
+def simple_to_spark(simple_schema):
     fields = []
     for col in simple_schema:
         spark_type = short_to_class_type(col[TYPE_POS])
         fields.append(t.StructField(col[NAME_POS], spark_type()))
+    return t.StructType(fields)
+
+
+def to_spark(field_confs):
+    fields = []
+    for field in field_confs.keys():
+        field_conf = field_confs[field]
+        spark_type = short_to_class_type(field_conf['type'])
+        fields.append(t.StructField(field,
+                                    spark_type(),
+                                    field_conf['nullable']))
     return t.StructType(fields)
 
 
@@ -102,7 +114,7 @@ def print_df_rows(df, num_rows=2):
     print("\n]")
 
 
-def enforce_schema(df, schema):
+def cast_schema(df, schema):
     """Enforce the schema on the data frame.
 
     Args:
@@ -113,6 +125,7 @@ def enforce_schema(df, schema):
         A data frame converted to the schema.
     """
     spark_schema = schema.to_spark()
+    # return spark_session.createDataFrame(df.rdd, schema=spark_schema)
     return reduce(cast,
                   spark_schema.fields,
                   df.select(*spark_schema.fieldNames()))

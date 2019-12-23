@@ -1,6 +1,6 @@
 from birgitta import spark as bspark
 from birgitta.dataiku.recipetest import scenariotest
-from birgitta.schema.spark import to_spark
+from birgitta.schema.spark import simple_to_spark
 from dataiku.scenario import Scenario
 
 
@@ -10,8 +10,8 @@ scenario = Scenario()
 src_project_key = 'TRIBUNE'
 src_recipe_key = 'compute_bsparkbookexampleresult'
 testbench_project_key = 'TRIBUNE_TESTBENCH'
-spark_schema = to_spark([{'name': 'letter', 'type': 'string'},
-                         {'name': 'number', 'type': 'bigint'}])
+spark_schema = simple_to_spark([['letter', 'string'],
+                                ['number', 'bigint']])
 
 test_params = {
     'principal_output_dataset': 'exampledatasetoutput',

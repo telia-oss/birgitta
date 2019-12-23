@@ -41,7 +41,7 @@ def df_w_rows(spark, schema, rows):
             rows = pd.DataFrame.from_records(rows)
     # Escape date time fields to avoid type problems between pandas and pyarrow
     df = spark.createDataFrame(rows, schema.to_escaped_spark())
-    return schema.enforce(df)
+    return schema.cast(df)
 
 
 def rows(schema, row_confs):

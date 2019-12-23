@@ -4,6 +4,8 @@ import os
 import sys
 import traceback
 
+from pyspark.sql.utils import AnalysisException
+
 __all__ = ['exec_code', 'run', 'run_and_exit']
 
 
@@ -26,25 +28,75 @@ def exec_code(code, globals_dict):
         # detail = err.args[0]
         lineno = err.lineno
         e = err
+    except AnalysisException as err:
+        error_class = err.__class__.__name__
+        lineno = get_lineno(err)
+        e = err
     except Exception as err:
         error_class = err.__class__.__name__
-        # detail = err.args[0]
-        cl, exc, tb = sys.exc_info()
-        lineno = traceback.extract_tb(tb)[-1][1]
+        lineno = get_lineno(err)
         e = err
     if e:
         lines = code.splitlines()
         lenlines = len(lines)
         if lineno < lenlines:
-            print("Recipe execution",
+            print("\nRecipe execution",
                   error_class,
                   "at recipe line:\n",
-                  lines[lineno-1])
+                  guilty_lines(lines, lineno))
         else:
             print("Recipe execution",
                   error_class)
         raise e
     return ret
+
+
+def get_lineno(err):
+    # detail = err.args[0]
+    cl, exc, tb = sys.exc_info()
+    tracebacks = traceback.extract_tb(tb)
+    filename = None
+    for tback in tracebacks:
+        filename = tback[0]
+        if filename == '<string>':  # Found exec()'ed string entry
+            lineno = tback[1]
+            break
+    if not filename:
+        # Fall back to last line, if filename == '<string>' not found
+        lineno = tracebacks[-1][1]
+    return lineno
+
+
+def guilty_lines(lines, lineno):
+    """Print the error line, including previous and next lines"""
+    # Previous lines
+    ret_lines = [""]  # Add spacing
+    non_prefix = "         "
+    err_prefix = "ERROR -> "
+    for i in range(-3, 0):
+        prev_lineno = lineno + i
+        if prev_lineno >= 0:
+            ret_lines.append(printable_line(non_prefix,
+                                            prev_lineno,
+                                            lines[prev_lineno]))
+    # Error line
+    ret_lines.append(printable_line(err_prefix, lineno, lines[lineno]))
+    # Next lines
+    lenlines = len(lines)
+    for i in range(1, 4):
+        next_lineno = lineno + i
+        if next_lineno < lenlines:
+            ret_lines.append(
+                printable_line(non_prefix, next_lineno, lines[next_lineno]))
+    ret_lines.append("")  # Add spacing
+    return "\n".join(ret_lines)
+
+
+def printable_line(prefix, lineno, line):
+    # FUTURE: Detract script prepend size from lineno, so lineno corresponds
+    # to recipe code line no
+    # return f"{non_prefix} {prev_lineno}: {lines[prev_lineno]}"
+    return f"{prefix}: {line}"
 
 
 def run(root_mod, recipe, dataframe_source, replacements=[]):
