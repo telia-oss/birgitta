@@ -42,7 +42,10 @@ class Schema:
         return cast_schema(df, self)
 
     def example_val_override(self, field):
-        return self.field_confs.get("example")
+        field_conf = self.field_confs[field]
+        if "example" in field_conf:
+            return field_conf["example"]
+        return None
 
     def field_params(self):
         ret = {}
@@ -58,10 +61,12 @@ class Schema:
         """Convert list DSL into a dict of values:
         {
             "name": {
-                "type": "str"
+                "type": "str",
+                "nullable": True
             },
             "customer_id": {
                 "type": "str",
+                "nullable": True,
                 "example": 124 # if present
             }
             ...
@@ -81,7 +86,7 @@ class Schema:
                     other_arg = row[i]
                     arg_type = type(other_arg)
                     if arg_type == ExampleVal:
-                        conf["example"] = other_arg.val
+                        conf["example"] = ExampleVal
                     elif arg_type == Nullable:
                         conf["nullable"] = other_arg.val
             ret[field] = conf

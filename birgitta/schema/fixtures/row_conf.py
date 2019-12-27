@@ -1,5 +1,7 @@
 """The RowConf class. Configures a fixture row.
 """
+from birgitta.schema.fixtures import ExampleVal
+
 __all__ = ['RowConf']
 
 
@@ -19,4 +21,9 @@ class RowConf:
     def get_field(self, field):
         """Get the value of one of the fields of the row.
         If it exists."""
-        return self.vals.get(field)
+        if not self.has_field(field):
+            return None
+        return ExampleVal(self.vals.get(field))
+
+    def has_field(self, field):
+        return field in self.vals

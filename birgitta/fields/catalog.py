@@ -14,6 +14,8 @@ The purpose of the catalog is:
 4. document all fields and eventually enable automatic publishing of these
 comments in views and reports
 """
+from birgitta.schema.fixtures import ExampleVal
+
 
 __all__ = ['Catalog']
 
@@ -60,7 +62,7 @@ class Catalog:
             example value
         """
         field_conf = self.get_field_conf(field)
-        return field_conf['example']
+        return ExampleVal(field_conf['example'])
 
     def get_field_conf(self, field):
         if field in self.field_confs:

@@ -5,6 +5,9 @@ from pandas.util.testing import assert_frame_equal
 __all__ = ['assert_outputs']
 
 
+PRINT_MAX = 20
+
+
 def assert_outputs(expected_dfs, dataframe_source, spark_session):
     """Assert that the expected fixture dataframes are equal to the
     produced outputs. Improves exception presentation."""
@@ -19,14 +22,16 @@ def assert_outputs(expected_dfs, dataframe_source, spark_session):
         try:
             assert_frame_equal(result_panda, expected_panda)
         except AssertionError as e:
-            if "Attributes are different" in str(e):
-                print("============== Assertion Error:",
+            ex_str = str(e)
+            if ("are different" in ex_str):
+                print("\n============== Assertion Error:",
                       df_key,
-                      "==============")
-                print("Result for %s" % (df_key))
-                result_df.show()
-                print("Expected for %s" % (df_key))
-                expected_df.show()
+                      "==============\n")
+                print(ex_str)
+                print("\nResult for %s (first %d)\n" % (df_key, PRINT_MAX))
+                result_df.show(PRINT_MAX, False)
+                print("\nExpected for %s (first %d)\n" % (df_key, PRINT_MAX))
+                expected_df.show(PRINT_MAX, False)
             raise e
 
 
@@ -47,9 +52,9 @@ def print_schema_diff(df_key, result_df, expected_df):
 
 
 def print_schema_type_diffs(df_key, result_df, expected_df):
-    print("============== ", end="")
+    print("\n============== ", end="")
     print("Data Frame Schema Diff: %s" % (df_key), end="")
-    print(" ==============")
+    print(" ==============\n")
     result_fields = df_schema_to_set(result_df)
     expected_fields = df_schema_to_set(expected_df)
     not_in_result = sorted(expected_fields.difference(result_fields))
@@ -77,7 +82,7 @@ def df_schema_to_str(df):
 
 
 def print_schema(name, df):
-    print("============== ", end="")
+    print("\n============== ", end="")
     print("Data Frame Schema: %s" % (name), end="")
-    print(" ==============")
+    print(" ==============\n")
     print(df_schema_to_str(df))

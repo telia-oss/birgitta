@@ -57,14 +57,49 @@ def test_write_with_schema(dataframe_source,
                                  spark_session)
     captured = capsys.readouterr()
     assert captured.out == (
-        "============== Data Frame Schema: " +
+        "\n============== Data Frame Schema: " +
         """assert_example_result (left) ==============
+
 0:letter:StringTy
+
 ============== """ +
         "Data Frame Schema: assert_example_expected (right) " +
         """==============
+
 0:letter:StringTy, 1:number:IntegerT
+
 ============== Data Frame Schema Diff: assert_example ==============
+
 Not in result: ['1:number:IntegerType']
+
+============== Assertion Error: assert_example ==============
+
+DataFrame are different
+
+DataFrame shape mismatch
+[left]:  (3, 1)
+[right]: (3, 2)
+
+Result for assert_example (first 20)
+
++------+
+|letter|
++------+
+|a     |
+|b     |
+|c     |
++------+
+
+
+Expected for assert_example (first 20)
+
++------+------+
+|letter|number|
++------+------+
+|a     |1     |
+|b     |2     |
+|c     |3     |
++------+------+
+
 """)
     assert captured.err == ""
