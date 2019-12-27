@@ -57,12 +57,12 @@ def get_val(schema, row_conf, field):
     # in the fixture
     # or
     # in the schema.
-    val = row_conf.get_field(field)  # fixture
-    if val is None:
-        val = schema.example_val_override(field)  # schema
-    if val is None:
-        val = schema.catalog.example_val(field)  # catalog
-    return val
+    ex_val = row_conf.get_field(field)  # fixture
+    if ex_val is None:
+        ex_val = schema.example_val_override(field)  # schema
+    if ex_val is None:
+        ex_val = schema.catalog.example_val(field)  # catalog
+    return ex_val.val
 
 
 def row(schema, row_conf):
