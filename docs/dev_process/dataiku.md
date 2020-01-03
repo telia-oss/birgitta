@@ -247,7 +247,8 @@ The old code can be left below for convenience, if you want to go back and hack 
 
 ```python
 from birgitta.dataframesource.sources.dataikusource import DataikuSource
-from birgitta.recipe import runner from newsltd_etl.projects import tribune
+from birgitta.recipe import runner
+from newsltd_etl.projects import tribune
 
 runner.run_and_exit(tribune, "recipes/compute_filtered_contracts.py", DataikuSource())
 
