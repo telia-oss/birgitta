@@ -1,6 +1,5 @@
 import sys
 
-import mock
 import pytest  # noqa F401
 from birgitta.dataframesource import contextsource
 

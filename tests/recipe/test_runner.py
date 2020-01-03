@@ -18,7 +18,14 @@ def test_run(dataframe_source):
     with pytest.raises(AnalysisException):
         runner.run(tribune,
                    "recipes/compute_filtered_contracts.py",
-                   dataframe_source)
+                   dataframe_source=dataframe_source)
+
+
+def test_run_no_source():
+    context.reset()
+    with pytest.raises(AttributeError):
+        runner.run(tribune,
+                   "recipes/compute_filtered_contracts.py")
 
 
 def test_syntax_error(dataframe_source):
@@ -32,8 +39,8 @@ def test_syntax_error(dataframe_source):
     with pytest.raises(SyntaxError):
         runner.run(tribune,
                    "recipes/compute_filtered_contracts.py",
-                   dataframe_source,
-                   replacements)
+                   replacements=replacements,
+                   dataframe_source=dataframe_source)
 
 
 def test_run_and_exit(dataframe_source):
@@ -42,7 +49,7 @@ def test_run_and_exit(dataframe_source):
         recipe = "recipes/compute_noop.py"
         runner.run_and_exit(tribune,
                             recipe,
-                            dataframe_source)
+                            dataframe_source=dataframe_source)
     pattern = f"Exit after running recipe: .*/tribune/{recipe}"
     expected_re = re.compile(pattern)
     assert expected_re.match(str(e_info.value))
