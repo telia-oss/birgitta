@@ -23,10 +23,12 @@ def derive_source():
     try:
         import dataiku
         try:
-            # Ensure we have the actual dataiku.spark mod and not a mock
+            # Ensure we have the actual dataiku module and not a mock.
+            # We check to different members for better robustness, in case
+            # one of them is removed by DSS.
             if (
-                    hasattr(dataiku, 'spark') and
-                    'attach_mock' not in dir(dataiku.spark)
+                    ('default_project_key' in dir(dataiku)) or
+                    ('dss_settings' in dir(dataiku))
             ):
                 from birgitta.dataframesource.sources.dataikusource import DataikuSource  # noqa E402
                 return DataikuSource()

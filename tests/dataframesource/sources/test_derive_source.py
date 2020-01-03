@@ -19,18 +19,16 @@ def test_no_dataiku():
     assert not source
 
 
-def test_has_dataiku_without_spark():
-    """Ensure that just having dataiku module is not enough.
-    It should also have spark module"""
-    reset_context()
-    sys.modules['dataiku'] = mock.MagicMock()
-    source = contextsource.get()
-    assert not source
+class DataikuMock(object):
+    dss_settings = 'dummy'
 
 
 def test_has_dataiku_without():
     reset_context()
-    sys.modules['dataiku'] = mock.MagicMock()
+    mod_mock = DataikuMock()
+    mod_mock.default_project_key = 'dummy'
+    sys.modules['dataiku'] = mod_mock
+    # To enable dataiku source loading, both these spark lines are needed
     sys.modules['dataiku'].spark = 'NonMock'
     sys.modules['dataiku.spark'] = 'NonMock'
     source = contextsource.get()
