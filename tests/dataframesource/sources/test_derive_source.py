@@ -1,6 +1,5 @@
 import sys
 
-import mock
 import pytest  # noqa F401
 from birgitta.dataframesource import contextsource
 
@@ -23,7 +22,7 @@ class DataikuMock(object):
     dss_settings = 'dummy'
 
 
-def test_has_dataiku_without():
+def test_has_dataiku():
     reset_context()
     mod_mock = DataikuMock()
     mod_mock.default_project_key = 'dummy'
@@ -33,3 +32,5 @@ def test_has_dataiku_without():
     sys.modules['dataiku.spark'] = 'NonMock'
     source = contextsource.get()
     assert type(source).__name__ == 'DataikuSource'
+    # Reset dataiku mocks to none, to clean up for other tests
+    reset_context()

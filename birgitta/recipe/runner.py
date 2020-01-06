@@ -157,7 +157,8 @@ def run_and_exit(root_mod, recipe, dataframe_source, replacements=[]):
     ret = run(root_mod, recipe, dataframe_source, replacements)
     print(ret)
     rpath = recipe_path(root_mod, recipe)
-    sys.exit(f"Exit after running recipe: {rpath}")
+    print(f"Exit after successfully running recipe: {rpath}")
+    sys.exit(0)
 
 
 def prepare_code(code, recipe, replacements):

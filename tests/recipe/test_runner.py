@@ -1,5 +1,3 @@
-import re
-
 import pytest
 from birgitta import context
 from birgitta.dataframesource.sources.localsource import LocalSource
@@ -42,7 +40,5 @@ def test_run_and_exit(dataframe_source):
         recipe = "recipes/compute_noop.py"
         runner.run_and_exit(tribune,
                             recipe,
-                            dataframe_source)
-    pattern = f"Exit after running recipe: .*/tribune/{recipe}"
-    expected_re = re.compile(pattern)
-    assert expected_re.match(str(e_info.value))
+                            dataframe_source=dataframe_source)
+    assert str(e_info.value) == '0'
