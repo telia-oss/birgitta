@@ -16,7 +16,15 @@ def test_run(dataframe_source):
     with pytest.raises(AnalysisException):
         runner.run(tribune,
                    "recipes/compute_filtered_contracts.py",
-                   dataframe_source)
+                   dataframe_source=dataframe_source)
+
+
+def test_run_no_source():
+    context.reset()
+    with pytest.raises(AttributeError) as e_info:
+        runner.run(tribune,
+                   "recipes/compute_filtered_contracts.py")
+    assert str(e_info.value) == "'NoneType' object has no attribute 'load'"
 
 
 def test_syntax_error(dataframe_source):
@@ -30,8 +38,8 @@ def test_syntax_error(dataframe_source):
     with pytest.raises(SyntaxError):
         runner.run(tribune,
                    "recipes/compute_filtered_contracts.py",
-                   dataframe_source,
-                   replacements)
+                   dataframe_source=dataframe_source,
+                   replacements=replacements)
 
 
 def test_run_and_exit(dataframe_source):

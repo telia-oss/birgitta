@@ -99,7 +99,7 @@ def printable_line(prefix, lineno, line):
     return f"{prefix}: {line}"
 
 
-def run(root_mod, recipe, dataframe_source, replacements=[]):
+def run(root_mod, recipe, *, dataframe_source=None, replacements=[]):
     """Run a recipe stored in .py file with exec(). The path is relative
     to the path of the mod.
 
@@ -130,7 +130,7 @@ def run(root_mod, recipe, dataframe_source, replacements=[]):
     return exec_code(code, globals_dict)
 
 
-def run_and_exit(root_mod, recipe, dataframe_source, replacements=[]):
+def run_and_exit(root_mod, recipe, *, dataframe_source=None, replacements=[]):
     """Run a recipe stored in .py file with exec(). The path is relative
     to the path of the mod. When finished exit(). This is a utility function
     to shortcut a recipe, and leave the rest of the recipe unexecuted.
@@ -154,7 +154,10 @@ def run_and_exit(root_mod, recipe, dataframe_source, replacements=[]):
     Returns:
        None. Prints output and calls sys.exit().
     """
-    ret = run(root_mod, recipe, dataframe_source, replacements)
+    ret = run(root_mod,
+              recipe,
+              dataframe_source=dataframe_source,
+              replacements=replacements)
     print(ret)
     rpath = recipe_path(root_mod, recipe)
     print(f"Exit after successfully running recipe: {rpath}")
