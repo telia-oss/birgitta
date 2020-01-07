@@ -100,7 +100,9 @@ def write(df,
           *,
           prefix=None,
           schema=None,
-          dataframe_source=None):
+          dataframe_source=None,
+          skip_cast=False,
+          **kwargs):
     """Write a dataframe to storage. It will adjust to whatever
     storage the environment has set. Currently storage is supported in
     file or dataiku (HDFS).
@@ -115,15 +117,20 @@ def write(df,
         schema (Schema): Birgitta schema to apply on write.
         dataframe_source (DataframeSourceBase): Option to override
         the data frame source defined in the context.
+        skip_cast (bool): If True, don't cast
 
     Returns:
        None.
     """
-    if schema:
+    if schema and not skip_cast:
         df = cast_schema(dataset_name, df, schema)
     if not dataframe_source:
         dataframe_source = contextsource.get()
-    return dataframe_source.write(df, dataset_name, prefix)
+    return dataframe_source.write(df,
+                                  dataset_name,
+                                  prefix,
+                                  schema=schema,
+                                  **kwargs)
 
 
 def cast_binary_cols_to_string(df):
