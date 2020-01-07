@@ -19,6 +19,13 @@ class Schema:
 
         Args:
             arr_schema (list): a schema in the list based simple schema DSL.
+
+            E.g.
+            [
+                ["sequence_no", "string"],
+                ["customer_id", "bigint"],
+                ["phone", "string"]
+            ]
             catalog (Catalog): the field catalog to get fixtures and
             descriptions from.
         """
