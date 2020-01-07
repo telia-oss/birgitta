@@ -4,6 +4,7 @@ import os
 import sys
 import traceback
 
+from birgitta.dataframesource import contextsource
 from pyspark.sql.utils import AnalysisException
 
 __all__ = ['exec_code', 'run', 'run_and_exit']
@@ -124,6 +125,8 @@ def run(root_mod, recipe, *, dataframe_source=None, replacements=[]):
     rpath = recipe_path(root_mod, recipe)
     with open(rpath) as f:
         code = prepare_code(f.read(), recipe, replacements)
+    if not dataframe_source:
+        dataframe_source = contextsource.get()
     globals_dict = {
         'BIRGITTA_DATAFRAMESOURCE': dataframe_source
     }
