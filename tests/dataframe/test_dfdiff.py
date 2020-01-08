@@ -1,6 +1,7 @@
 import pytest  # noqa F401
 from birgitta.dataframe import dfdiff
 from pyspark.sql import functions as F
+from pyspark.sql.types import LongType
 from tests.datasets import fixtures, expected  # noqa F
 
 
@@ -67,7 +68,8 @@ Actual:   letter,numfoo"""
 
 
 def test_error_on_val_diff(fixtures, expected):  # noqa F811
-    expected_val_diff = expected.withColumn('number', F.lit(3))
+    expected_val_diff = expected.withColumn(
+        'number', F.lit(3).cast(LongType()))
     assert dfdiff.diff(fixtures, expected_val_diff) == """Error: Rows are different (max 20 rows shown)
 Only in expected:
   letter  number

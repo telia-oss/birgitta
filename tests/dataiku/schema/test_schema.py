@@ -11,6 +11,7 @@ def test_to_dataiku():
     treated as None when deriving the fixture val."""
     catalog = Catalog()
     catalog.add_field('foobool', description='Foo bool', example=True)
+    catalog.add_field('foobigint', description='Foo bigint', example=3999999)
     catalog.add_field('fooint', description='Foo int', example=39)
     catalog.add_field('foolong', description='Foo long', example=399)
     catalog.add_field('foofloat', description='Foo float', example=22.2)
@@ -22,7 +23,8 @@ def test_to_dataiku():
                       example=datetime.date.today())
     schema_list = [
         ['foobool', 'bool'],
-        ['fooint', 'bigint'],
+        ['foobigint', 'bigint'],
+        ['fooint', 'int'],
         ['foolong', 'long'],
         ['foofloat', 'float'],
         ['foodouble', 'double'],
@@ -36,7 +38,9 @@ def test_to_dataiku():
         'columns': [
             {'name': 'foobool', 'type': 'boolean',
              'comment': 'Foo bool', 'meaning': 'Boolean'},
-            {'name': 'fooint', 'type': 'bigint',
+            {'name': 'foobigint', 'type': 'bigint',
+             'comment': 'Foo bigint', 'meaning': 'Integer'},
+            {'name': 'fooint', 'type': 'int',
              'comment': 'Foo int', 'meaning': 'Integer'},
             {'name': 'foolong', 'type': 'bigint',
              'comment': 'Foo long', 'meaning': 'Integer'},

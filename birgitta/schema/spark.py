@@ -17,7 +17,8 @@ __all__ = [
 
 spark_short_to_class_types = {
     "bool": t.BooleanType,
-    "bigint": t.IntegerType,
+    "int": t.IntegerType,
+    "bigint": t.LongType,
     "long": t.LongType,
     "float": t.FloatType,
     "double": t.DoubleType,
@@ -29,7 +30,7 @@ spark_short_to_class_types = {
 spark_class_to_short_types = {
     "BooleanType": "bool",
     "LongType": "bigint",
-    "IntegerType": "bigint",
+    "IntegerType": "int",
     "FloatType": "float",
     "DoubleType": "double",
     "StringType": "string",

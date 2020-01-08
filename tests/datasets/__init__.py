@@ -1,5 +1,5 @@
 import pytest
-from pyspark.sql.types import IntegerType
+from pyspark.sql.types import LongType
 from pyspark.sql.types import StringType
 from pyspark.sql.types import StructField
 from pyspark.sql.types import StructType
@@ -7,7 +7,7 @@ from pyspark.sql.types import StructType
 
 fixtures_schema = StructType([
     StructField('letter', StringType()),
-    StructField('number', IntegerType())
+    StructField('number', LongType())
 ])
 
 
