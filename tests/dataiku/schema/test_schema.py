@@ -34,11 +34,11 @@ def test_to_dataiku():
     expected_schema = {
         'userModified': True,
         'columns': [
-            {'name': 'foobool', 'type': 'bool',
+            {'name': 'foobool', 'type': 'boolean',
              'comment': 'Foo bool', 'meaning': 'Boolean'},
             {'name': 'fooint', 'type': 'bigint',
              'comment': 'Foo int', 'meaning': 'Integer'},
-            {'name': 'foolong', 'type': 'long',
+            {'name': 'foolong', 'type': 'bigint',
              'comment': 'Foo long', 'meaning': 'Integer'},
             {'name': 'foofloat', 'type': 'float',
              'comment': 'Foo float', 'meaning': 'Decimal'},
@@ -46,7 +46,7 @@ def test_to_dataiku():
              'comment': 'Foo double', 'meaning': 'Decimal'},
             {'name': 'foostring', 'type': 'string',
              'comment': 'Foo string', 'meaning': 'Text'},
-            {'name': 'footimestamp', 'type': 'timestamp',
+            {'name': 'footimestamp', 'type': 'date',
              'comment': 'Foo timestamp', 'meaning': 'Date'},
             {'name': 'foodate', 'type': 'date',
              'comment': 'Foo date', 'meaning': 'Date'},

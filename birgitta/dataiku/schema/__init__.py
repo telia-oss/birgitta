@@ -6,14 +6,20 @@ __all__ = [
 ]
 
 
+# See https://doc.dataiku.com/dss/latest/schemas/definitions.html
+# string
+# int (32 bits), bigint (64 bits), smallint (16 bits), tinyint (8 bits)
+# float (32 bits decimal), double (64 bits decimal)
+# boolean
+# date
 SHORT_TO_DKU_TYPE = {
-    "bool": "bool",
+    "bool": "boolean",
     "bigint": "bigint",
-    "long": "long",
+    "long": "bigint",
     "float": "float",
     "double": "double",
     "string": "string",
-    "timestamp": "timestamp",
+    "timestamp": "date",
     "date": "date"
 }
 
