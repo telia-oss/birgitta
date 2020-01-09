@@ -66,11 +66,11 @@ def test_write_with_schema(dataframe_source,
         "Data Frame Schema: assert_example_expected (right) " +
         """==============
 
-0:letter:StringTy, 1:number:IntegerT
+0:letter:StringTy, 1:number:LongType
 
 ============== Data Frame Schema Diff: assert_example ==============
 
-Not in result: ['1:number:IntegerType']
+Not in result: ['1:number:LongType']
 
 ============== Assertion Error: assert_example ==============
 

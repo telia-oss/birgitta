@@ -4,7 +4,7 @@ import pytest
 from birgitta import spark
 from birgitta.dataframe import dataframe, dfdiff
 from birgitta.dataframesource.sources.s3source import S3Source  # noqa F401
-from pyspark.sql.types import IntegerType
+from pyspark.sql.types import LongType
 from pyspark.sql.types import StringType
 from pyspark.sql.types import StructField
 from pyspark.sql.types import StructType
@@ -17,7 +17,7 @@ def spark_session():
 
 fixtures_schema = StructType([
     StructField('letter', StringType()),
-    StructField('number', IntegerType())
+    StructField('number', LongType())
 ])
 
 

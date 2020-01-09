@@ -6,14 +6,21 @@ __all__ = [
 ]
 
 
+# See https://doc.dataiku.com/dss/latest/schemas/definitions.html
+# string
+# int (32 bits), bigint (64 bits), smallint (16 bits), tinyint (8 bits)
+# float (32 bits decimal), double (64 bits decimal)
+# boolean
+# date
 SHORT_TO_DKU_TYPE = {
-    "bool": "bool",
+    "bool": "boolean",
     "bigint": "bigint",
-    "long": "long",
+    "long": "bigint",
+    "int": "int",
     "float": "float",
     "double": "double",
     "string": "string",
-    "timestamp": "timestamp",
+    "timestamp": "date",
     "date": "date"
 }
 
@@ -22,6 +29,7 @@ SHORT_TO_DKU_MEANING = {
     "bool": "Boolean",
     "bigint": "Integer",
     "long": "Integer",
+    "int": "Integer",
     "float": "Decimal",
     "double": "Decimal",
     "string": "Text",
@@ -47,7 +55,7 @@ def to_dataiku(schema):
             {'name': 'foobool', 'type': 'bool',
              'comment': 'Foo bool', 'meaning': 'Boolean'},
             {'name': 'fooint', 'type': 'bigint',
-             'comment': 'Foo int', 'meaning': 'Integer'},
+             'comment': 'Foo bigint', 'meaning': 'Integer'},
             {'name': 'foodate', 'type': 'date',
              'comment': 'Foo date', 'meaning': 'Date'},
         ]
