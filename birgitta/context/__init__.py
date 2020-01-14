@@ -7,6 +7,8 @@
 """
 import datetime
 
+from birgitta.dataiku import platform as dkuplatform
+
 
 class Context():
     TODAY = datetime.date.today()
@@ -15,7 +17,10 @@ class Context():
 def reset():
     Context.BIRGITTA_DATAFRAMESOURCE = None
     Context.BIRGITTA_TEST_COVERAGE = {}
-    Context.BIRGITTA_SPARK_SESSION_TYPE = "LOCAL"
+    if dkuplatform.is_current_platform():
+        Context.BIRGITTA_SPARK_SESSION_TYPE = "DATAIKU"
+    else:
+        Context.BIRGITTA_SPARK_SESSION_TYPE = "LOCAL"
 
 
 reset()  # Init context

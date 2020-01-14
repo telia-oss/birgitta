@@ -6,7 +6,7 @@ from birgitta import timing
 from pyspark.sql import SparkSession
 
 
-__all__ = ['local_session', 'session']
+__all__ = ['local_session', 'session', 'default_server_session']
 
 
 def session(*, conf=None, app_name=None):
@@ -60,7 +60,7 @@ def local_session(*, app_name='birgitta_spark_test'):
 
 
 def is_local():
-    return context.get("BIRGITTA_SPARK_SESSION_TYPE")
+    return context.get("BIRGITTA_SPARK_SESSION_TYPE") == "LOCAL"
 
 
 def local_conf_spark():
