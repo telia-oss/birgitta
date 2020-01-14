@@ -42,6 +42,12 @@ from birgitta.fields import Catalog  # noqa E402
 from birgitta.schema.schema import Schema  # noqa E402
 
 
+def is_current_platform():
+    return True
+
+
+@mock.patch("birgitta.dataiku.platform.is_current_platform",
+            is_current_platform)
 def test_write_without_set_schema():
     dataiku_source = DataikuSource()
     dataset_name = "fixtures"
@@ -60,6 +66,12 @@ def test_write_without_set_schema():
     dapi_dataset_mock.set_schema.assert_not_called()
 
 
+def is_current_platform():
+    return True
+
+
+@mock.patch("birgitta.dataiku.platform.is_current_platform",
+            is_current_platform)
 def test_write():
     # dapi_dataset_mock = mock.MagicMock()
     # project_obj_mock.get_dataset.return_value = dapi_dataset_mock

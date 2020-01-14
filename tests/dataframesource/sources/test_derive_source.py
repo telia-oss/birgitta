@@ -1,5 +1,6 @@
 import sys
 
+import mock
 import pytest  # noqa F401
 from birgitta.dataframesource import contextsource
 
@@ -10,6 +11,8 @@ def reset_context():
         del sys.modules['dataiku.spark']
     if 'dataiku' in sys.modules:
         del sys.modules['dataiku']
+    if 'dataikuapi' in sys.modules:
+        del sys.modules['dataikuapi']
 
 
 def test_no_dataiku():
@@ -18,15 +21,16 @@ def test_no_dataiku():
     assert not source
 
 
-class DataikuMock(object):
-    dss_settings = 'dummy'
+def is_current_platform():
+    return True
 
 
+@mock.patch("birgitta.dataiku.platform.is_current_platform",
+            is_current_platform)
 def test_has_dataiku():
     reset_context()
-    mod_mock = DataikuMock()
-    mod_mock.default_project_key = 'dummy'
-    sys.modules['dataiku'] = mod_mock
+    sys.modules['dataikuapi'] = mock.Mock()
+    sys.modules['dataiku'] = mock.Mock()
     # To enable dataiku source loading, both these spark lines are needed
     sys.modules['dataiku'].spark = 'NonMock'
     sys.modules['dataiku.spark'] = 'NonMock'
