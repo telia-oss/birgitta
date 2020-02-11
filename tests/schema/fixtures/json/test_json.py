@@ -8,9 +8,9 @@ from birgitta.schema.fixtures import json as fx_json
 
 def test_make(tmpdir):
     root_dir = org_root(__file__)
-    result_json_file = F"{root_dir}/fixtureorg/bookltd/projects/ignatius/tests/fixtures/generated_json/contract_data/fx_default.json"  # noqa 501
+    result_json_file = F"{root_dir}/fixtureorg/bookltd/projects/ignatius/tests/fixtures/generated_json/contract_data/default.json"  # noqa 501
     fx_json.make(fixtureorg.bookltd)
-    expected_json_file = F"{root_dir}/expected/contract_data/fx_default.json"  # noqa 501
+    expected_json_file = F"{root_dir}/expected/contract_data/default.json"  # noqa 501
     assert_json_files_equal(
         expected_json_file,
         result_json_file
