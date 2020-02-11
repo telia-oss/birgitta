@@ -1,6 +1,7 @@
 [
     {
-        "brand_code": 44,
+        "brand_code": 1,
+        "brand_name": "Tribune",
         "contract_prod_code": "PAPERVERSION",
         "customer_id": 11220,
         "end_date": "2019-03-01T01:00:00.000+01:00",

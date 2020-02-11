@@ -5,7 +5,6 @@ import json
 import os
 import re
 import shutil
-from inspect import getmembers, isfunction
 
 from birgitta import spark
 
@@ -59,18 +58,11 @@ def create_json(fx_mod, dst_dir):
     project = extracts.group(1)
     dataset = extracts.group(2)
     spark_session = spark.local_session()
-    fxs = []
+    fixture = fx_mod.fixture
 
-    for member in getmembers(fx_mod):
-        member_type = member[1]
-        member_name = member[0]
-        if (isfunction(member_type) and
-           member_name.startswith("fx_")):
-            fxs.append(member_name)
-
-    for fx in fxs:
-        df = getattr(fx_mod, fx)(spark_session)
-        json_write(df, project, dataset, fx, dst_dir)
+    for variant_name in fixture.variant_names():
+        df = fixture.df(variant_name, spark_session)
+        json_write(df, project, dataset, variant_name, dst_dir)
 
 
 def json_write(df, project, dataset, fx, dst_dir):

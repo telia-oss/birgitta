@@ -22,6 +22,11 @@ class Fixture:
         self.dataset = dataset
         self.variants = {}
 
+    def variant_names(self):
+        variant_set = {'default'}
+        v_keys = set(self.variants.keys())
+        return variant_set.union(v_keys)
+
     def df(self, variant_name, spark):
         """Constructs a fixtures dataframe with the variant.
 

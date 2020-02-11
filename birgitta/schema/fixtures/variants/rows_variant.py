@@ -23,6 +23,4 @@ class RowsVariant(VariantBase):
 
         Returns:
             A data frame of the fixture."""
-        ret = fixtures.df_w_rows(spark, dataset.schema, self.rows)
-        ret.show()
         return fixtures.df_w_rows(spark, dataset.schema, self.rows)
