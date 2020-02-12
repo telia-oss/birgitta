@@ -57,4 +57,4 @@ def test_utc_consistency(spark_session, expected):
         .withColumn('c_dat', fcol.cast(ts_type))
         .withColumn('f_u_dat', f_from_utc_ts)
         .drop('dat'))
-    assert not dfdiff.diff(datetime_df, expected)
+    dfdiff.assert_equals(datetime_df, expected)
