@@ -68,6 +68,8 @@ def local_conf_spark():
     # Speed up config for small test data sets
     conf = pyspark.SparkConf().setAll([
         # No parallelism needed in small data
-        ('spark.sql.shuffle.partitions', 1)
+        ('spark.sql.shuffle.partitions', 1),
+        # Default time zone to UTC, for consistency
+        ("spark.sql.session.timeZone", "UTC")
     ])
     return conf

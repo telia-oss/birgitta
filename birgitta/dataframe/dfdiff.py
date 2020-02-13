@@ -37,9 +37,7 @@ Actual:   %s""" % (expected_dtypes, actual_dtypes)
 
 
 def diff(expected, actual):
-    """Diff two dataframes. However, this function has errors
-    as it only subtracts expected from actual, when it should
-    test the opposite also."""
+    """Diff two dataframes."""
     col_diff = cols_diff(expected, actual)
     if col_diff:
         return col_diff

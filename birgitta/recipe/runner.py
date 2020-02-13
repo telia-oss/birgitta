@@ -25,16 +25,22 @@ def exec_code(code, globals_dict):
     try:
         ret = exec(code, globals_dict)
     except SyntaxError as err:
-        error_class = err.__class__.__name__
+        err_desc = err.__class__.__name__
         # detail = err.args[0]
         lineno = err.lineno
         e = err
     except AnalysisException as err:
-        error_class = err.__class__.__name__
+        err_desc = err.__class__.__name__
         lineno = get_lineno(err)
         e = err
+    except NameError as err:
+        err_desc = f'{err.__class__.__name__}: {err}'
+        lineno = get_lineno(err) - 1
+        if lineno < 0:
+            lineno = 0
+        e = err
     except Exception as err:
-        error_class = err.__class__.__name__
+        err_desc = err.__class__.__name__
         lineno = get_lineno(err)
         e = err
     if e:
@@ -42,12 +48,12 @@ def exec_code(code, globals_dict):
         lenlines = len(lines)
         if lineno < lenlines:
             print("\nRecipe execution",
-                  error_class,
-                  "at recipe line:\n",
+                  err_desc,
+                  "\n",
                   guilty_lines(lines, lineno))
         else:
             print("Recipe execution",
-                  error_class)
+                  err_desc)
         raise e
     return ret
 
@@ -74,21 +80,27 @@ def guilty_lines(lines, lineno):
     ret_lines = [""]  # Add spacing
     non_prefix = "         "
     err_prefix = "ERROR -> "
-    for i in range(-3, 0):
+    for i in range(-6, 0):
         prev_lineno = lineno + i
         if prev_lineno >= 0:
+            line = lines[prev_lineno]
+            if line.startswith('log_transform('):
+                continue  # Skip injected log lines
             ret_lines.append(printable_line(non_prefix,
                                             prev_lineno,
-                                            lines[prev_lineno]))
+                                            line))
     # Error line
     ret_lines.append(printable_line(err_prefix, lineno, lines[lineno]))
     # Next lines
     lenlines = len(lines)
-    for i in range(1, 4):
+    for i in range(1, 7):
         next_lineno = lineno + i
         if next_lineno < lenlines:
+            line = lines[next_lineno]
+            if line.startswith('log_transform('):
+                continue  # Skip injected log lines
             ret_lines.append(
-                printable_line(non_prefix, next_lineno, lines[next_lineno]))
+                printable_line(non_prefix, next_lineno, line))
     ret_lines.append("")  # Add spacing
     return "\n".join(ret_lines)
 
