@@ -17,7 +17,7 @@ def time(description=""):
     """
     global last, first, results
     entry = {
-        "str": str,
+        "str": description,
         "last": last,
         "first": first,
         "now": datetime.now()
@@ -32,7 +32,7 @@ def print_time(entry):
           diffstr(entry["last"], entry["now"]),
           "total:",
           diffstr(entry["first"], entry["now"]),
-          "now: ",
+          "now:",
           entry["now"].strftime("%H:%M:%S.%f"),
           entry["str"])
 

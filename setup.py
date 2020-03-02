@@ -4,7 +4,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-version = '0.1.33'
+version = '0.1.34'
 here = path.abspath(path.dirname(__file__))
 
 long_description = """Birgitta is a Python ETL test and schema framework,
