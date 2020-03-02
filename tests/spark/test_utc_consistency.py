@@ -15,12 +15,12 @@ instead of a trying to apply from_utc_timestamp()."""
 import datetime
 import pytest  # noqa F401
 from birgitta.dataframe import dfdiff
-from pyspark.sql import Row
 from pyspark.sql import functions as F
+from pyspark.sql import Row
 from pyspark.sql.types import StringType
-from pyspark.sql.types import TimestampType
 from pyspark.sql.types import StructField
 from pyspark.sql.types import StructType
+from pyspark.sql.types import TimestampType
 
 
 @pytest.fixture()
