@@ -1,3 +1,3 @@
-# from . import tests
+from birgitta.project import Project
 
-# __all__ = ["tests"]
+Project('tribune')
