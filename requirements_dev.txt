@@ -5,7 +5,7 @@ mock==2.0.0
 pandas==0.24.1
 pyarrow==0.13.0
 pytest==3.8.0
-pytest-cov==2.5.1
+pytest-cov==2.10.0
 pytest_mock==1.10.0
 holidays==0.9.10
 flake8==3.7.7
