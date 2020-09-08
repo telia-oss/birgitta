@@ -2,7 +2,7 @@ docopt==0.6.2
 numpy==1.17.2
 pyspark==2.3.3
 mock==2.0.0
-pandas==0.24.1
+pandas==1.1.2
 pyarrow==0.13.0
 pytest==3.8.0
 pytest-cov==2.5.1
