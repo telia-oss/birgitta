@@ -16,7 +16,7 @@ from birgitta.recipetest.coverage.transform import prepare
 __all__ = ['recipe_path', 'run_case_partial']
 
 
-@pytest.fixture("function")  # noqa F401
+@pytest.fixture(scope="function")  # noqa F401
 def run_case_partial(tmpdir,
                      cov_report,  # noqa F811
                      cov_results,  # noqa F811
