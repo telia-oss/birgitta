@@ -192,5 +192,5 @@ print("=== Recipe {recipe} complete ===")
 
 
 def recipe_path(root_mod, recipe):
-    mod_path = os.path.dirname(inspect.getfile(root_mod))
+    mod_path = os.path.dirname(root_mod.__file__)
     return f"{mod_path}/{recipe}"
