@@ -24,7 +24,7 @@ def recipe_content(*,
     rpath = recipe_path(projects_base=projects_base,
                         project=project,
                         recipe=recipe)
-    return open(rpath).read()
+    return open(rpath, "r").read()
 
 
 def recipe_path(*, projects_base, project, recipe):

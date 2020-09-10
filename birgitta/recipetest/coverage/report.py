@@ -99,7 +99,7 @@ def cov_report_path(tmpdir):
     return tmpdir.mkdir("coverage").join("coverage.log")
 
 
-@pytest.fixture("module")  # noqa 401
+@pytest.fixture(scope="module")  # noqa 401
 def cov_results():
     """ Fixture holding transform coverage results from all test cases
     """
