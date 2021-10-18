@@ -1,6 +1,6 @@
 docopt==0.6.2
 numpy==1.17.2
-pyspark==2.3.3
+pyspark==3.2.0
 mock==2.0.0
 pandas==0.24.1
 pyarrow==0.13.0
